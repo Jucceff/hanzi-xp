@@ -109,3 +109,39 @@ test('sesión de frases útiles: ordenar y encontrar palabras', async ({ page })
   expect(ordered).toBeGreaterThan(0);
   expect(identified).toBeGreaterThan(0);
 });
+
+/** Dibuja el carácter del panel de escritura siguiendo las líneas medias de sus trazos. */
+async function drawCharacter(page: Page) {
+  const plan = await page.evaluate(async () => {
+    const pad = document.querySelector('.writer-pad')!;
+    const ch = pad.getAttribute('aria-label')!.slice(-1);
+    const data = await (await fetch(`/strokes/${encodeURIComponent(ch)}.json`)).json();
+    const r = pad.querySelector('svg')!.getBoundingClientRect();
+    const P = 10;
+    const sc = (r.width - 2 * P) / 1024;
+    const xOff = P;
+    const yOff = 124 * sc + P;
+    return (data.medians as number[][][]).map((m) => m.map(([x, y]) => [r.left + x * sc + xOff, r.top + (r.height - yOff - y * sc)]));
+  });
+  for (const stroke of plan) {
+    await page.mouse.move(stroke[0][0], stroke[0][1]);
+    await page.mouse.down();
+    for (const [x, y] of stroke.slice(1)) await page.mouse.move(x, y, { steps: 4 });
+    await page.mouse.up();
+    await page.waitForTimeout(400);
+  }
+}
+
+test('escritura: escribir un carácter da XP de escritura', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Escritura/ }).click();
+  await expect(page.getByText(/Escribe el carácter/)).toBeVisible();
+  await expect(page.getByText(/Errores: 0/)).toBeVisible({ timeout: 15_000 }); // termina la animación guiada
+  const ch = (await page.locator('.writer-pad').getAttribute('aria-label'))!.slice(-1);
+  await drawCharacter(page);
+  await expect(page.getByText(/0 errores · Bien/)).toBeVisible();
+  await page.getByRole('button', { name: /Bien escrito/ }).click();
+  await page.getByRole('button', { name: 'Salir de la sesión' }).click();
+  await page.goto(`/#/ficha/c/${encodeURIComponent(ch)}`);
+  await expect(page.locator('.skill-row', { hasText: 'Escritura' })).toContainText('12/12 XP');
+});

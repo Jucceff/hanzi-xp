@@ -107,3 +107,19 @@ describe('frases', () => {
     }
   });
 });
+
+describe('sesión de escritura', () => {
+  it('repasos vencidos + caracteres nuevos de las palabras que ya practicas', async () => {
+    const { buildWritingSession } = await import('./plan');
+    const now = NOW.getTime();
+    const states = [
+      reviewed('w:我们', 'recognition', new Date('2026-11-01T09:00:00')),
+      { ...reviewed('c:你', 'writing', new Date('2026-10-20T09:00:00')), due: now - 1000 },
+    ];
+    const q = buildWritingSession(states, () => 0.5, [1], now, 6, 20);
+    expect(q[0]).toEqual({ itemId: 'c:你', skill: 'writing', reason: 'due' });
+    expect(new Set(q.filter((x) => x.reason === 'new').map((x) => x.itemId))).toEqual(new Set(['c:我', 'c:们']));
+    expect(specFor(q[1], { audio: false })).toEqual({ type: 'write', guided: true, xpKind: 'writing' });
+    expect(specFor(q[0], { audio: false })).toEqual({ type: 'write', guided: false, xpKind: 'writing' });
+  });
+});

@@ -288,6 +288,17 @@ a {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.grid-3 .btn {
+  padding: 10px 6px;
+  font-size: 14px;
+  flex-direction: column;
+  gap: 2px;
+}
 
 .btn {
   appearance: none;
@@ -1071,6 +1082,11 @@ a {
 .writer {
   width: 180px;
   margin: 0 auto;
+}
+.writer-pad {
+  touch-action: none; /* que el dedo dibuje en vez de desplazar la página */
+  background-color: var(--card);
+  cursor: crosshair;
 }
 
 /* ───────── progreso ───────── */

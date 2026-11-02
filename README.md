@@ -27,7 +27,9 @@ npm run build        # build de producción + service worker
 
 Frases: **ordena la frase** (fichas con hanzi y pinyin a partir de la traducción) y **encuentra la palabra** en una frase (por su significado, por su hanzi con la frase en pinyin o por su sonido). Usan los ejemplos de cada palabra y un repertorio de 126 **frases útiles** por temas (`data/authored/phrases.json`, validadas: solo vocabulario HSK 1–3 y nombres propios de una lista blanca).
 
-Flashcards (ambas direcciones), opción múltiple (hanzi→significado, significado→hanzi, hanzi→pinyin), escucha (oír → elegir el hanzi, con pares mínimos y sin homófonos) y tonos (oír → elegir los tonos sobre el pinyin sin tonos). La escucha se desbloquea para las palabras vistas un día anterior y requiere una voz zh-CN en el dispositivo. Modos: sesión diaria, frases útiles, debilidades y entrenamiento de tonos.
+Flashcards (ambas direcciones), opción múltiple (hanzi→significado, significado→hanzi, hanzi→pinyin), escucha (oír → elegir el hanzi, con pares mínimos y sin homófonos) y tonos (oír → elegir los tonos sobre el pinyin sin tonos). La escucha se desbloquea para las palabras vistas un día anterior y requiere una voz zh-CN en el dispositivo. **Escritura** (Hanzi Writer en modo quiz): la primera vez, guiada (animación + contorno); después, de memoria, con «Pista» (cuenta como 2 errores), «Contorno» (1) y «No lo sé». La valoración depende de los errores en proporción a los trazos. Los caracteres nuevos salen de las palabras que ya practicas, priorizando la lista oficial de escritura (书写字). También se practica desde la ficha de cada carácter.
+
+Modos: sesión diaria (incluye repasos de escritura), frases útiles, escritura, debilidades y entrenamiento de tonos.
 
 ## Modelo de progreso
 

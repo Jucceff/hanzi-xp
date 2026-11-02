@@ -25,7 +25,9 @@ export type ExerciseSpec =
    * Encontrar una palabra dentro de una frase. La pista es su significado, su hanzi
    * (con la frase escrita en pinyin) o su sonido.
    */
-  | { type: 'identify'; sentence: Sentence; target: string; cue: 'meaning' | 'hanzi' | 'audio'; show: 'hanzi' | 'pinyin'; xpKind: Exercise };
+  | { type: 'identify'; sentence: Sentence; target: string; cue: 'meaning' | 'hanzi' | 'audio'; show: 'hanzi' | 'pinyin'; xpKind: Exercise }
+  /** Escribir un carácter trazo a trazo (guiado = con contorno, la primera vez). */
+  | { type: 'write'; guided: boolean; xpKind: Exercise };
 
 export interface SpecOptions {
   /** hay voz zh-CN o audio nativo: se pueden usar ejercicios de escucha */
@@ -179,6 +181,7 @@ function sentenceSpec(q: QueueItem, opts: SpecOptions, rnd: () => number, force:
 export function specFor(q: QueueItem, opts: SpecOptions = { audio: false }, rnd = Math.random): ExerciseSpec {
   const view = viewOf(q.itemId)!;
   const isNew = q.reason === 'new';
+  if (q.skill === 'writing') return { type: 'write', guided: isNew, xpKind: 'writing' };
   // las frases se usan al repasar (no el primer día) y siempre en la sesión de frases
   if (!isNew || q.phraseId) {
     const s = sentenceSpec(q, opts, rnd, Boolean(q.phraseId));

@@ -87,3 +87,27 @@ export function propagatedDelta(wordDelta: number, correct: boolean): number {
   if (!correct) return -CHAR_FAIL_PENALTY;
   return Math.max(1, Math.round(wordDelta * CHAR_SHARE));
 }
+
+export interface WritingResult {
+  /** errores de trazo contados por el quiz */
+  mistakes: number;
+  /** nº de trazos del carácter */
+  strokes: number;
+  /** escribió con el contorno visible (modo guiado, primera vez) */
+  guided: boolean;
+  /** pidió una pista o pulsó "no lo sé" */
+  gaveUp: boolean;
+}
+
+/**
+ * Valoración de un ejercicio de escritura a partir de los errores, relativa al
+ * número de trazos (3 errores en 我 no es lo mismo que en 谢).
+ * Con contorno visible como mucho "Bien": copiar no es recordar.
+ */
+export function writingGrade(r: WritingResult): Grade {
+  if (r.gaveUp) return 1;
+  const rate = r.mistakes / Math.max(1, r.strokes);
+  let g: Grade = r.mistakes === 0 ? 4 : rate <= 0.25 ? 3 : rate <= 0.6 ? 2 : 1;
+  if (r.guided && g > 3) g = 3;
+  return g;
+}

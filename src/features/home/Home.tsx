@@ -102,9 +102,12 @@ export function Home() {
         <Link className="btn block" to="/sesion/frases">
           Frases útiles <span className="han" aria-hidden="true">句</span>
         </Link>
-        <div className="grid-2">
+        <div className="grid-3">
           <Link className="btn" to="/sesion/debilidades" aria-disabled={!practicedAny} onClick={(e) => !practicedAny && e.preventDefault()}>
             Debilidades
+          </Link>
+          <Link className="btn" to="/sesion/escritura">
+            Escritura <span className="han" aria-hidden="true">写</span>
           </Link>
           <Link className="btn" to="/sesion/tonos" aria-disabled={!voice} onClick={(e) => !voice && e.preventDefault()} title={voice ? 'Pares mínimos y tonos' : 'Necesita voz china'}>
             Tonos <span className="han" aria-hidden="true">ā á ǎ à</span>

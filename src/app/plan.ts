@@ -1,5 +1,5 @@
 // Planificación de sesiones a partir del estado guardado.
-import { newWordOrder, phrases, viewOf, wordItem, words } from '../content';
+import { charByChar, charItem, chars, newWordOrder, phrases, viewOf, wordItem, words } from '../content';
 import { retentionOf, type SkillState } from '../core/engine';
 import { NEW_ITEM_SKILLS, buildDailySession, buildWeaknessSession, interleave, type QueueItem } from '../core/queue';
 import type { Scheduler } from '../core/scheduler';
@@ -8,7 +8,7 @@ import type { DailyStat, Settings } from '../db/db';
 import { localDate } from '../db/repo';
 import { minimalPairs } from './exercises';
 
-export type SessionMode = 'hoy' | 'debilidades' | 'tonos' | 'frases';
+export type SessionMode = 'hoy' | 'debilidades' | 'tonos' | 'frases' | 'escritura';
 
 export interface PlanOptions {
   /** hay audio (voz zh-CN): se incluyen ejercicios de escucha */
@@ -16,8 +16,9 @@ export interface PlanOptions {
   now?: Date;
 }
 
+/** Habilidades de la sesión diaria. La escritura entra solo como repaso (lo nuevo, en su sesión). */
 export function sessionSkills(audio: boolean): readonly Skill[] {
-  return audio ? [...NEW_ITEM_SKILLS, 'listening'] : NEW_ITEM_SKILLS;
+  return [...NEW_ITEM_SKILLS, ...(audio ? (['listening'] as const) : []), 'writing'];
 }
 
 export function newLeftToday(settings: Settings, daily: DailyStat[], now = Date.now()) {
@@ -41,6 +42,7 @@ export function planSession(
   if (mode === 'debilidades') return buildWeaknessSession(states, retention, { limit: 20, skills });
   if (mode === 'tonos') return buildToneDrill(states, retention, settings.levels, 20);
   if (mode === 'frases') return buildPhraseSession(states, retention, settings.levels, 12);
+  if (mode === 'escritura') return buildWritingSession(states, retention, settings.levels, now.getTime(), 6, 20);
   return buildDailySession({
     states,
     newOrder: newWordOrder(settings.levels),
@@ -111,4 +113,37 @@ export function buildPhraseSession(
     const skill = cycle[i % cycle.length];
     return { itemId: target, skill: skill === 'production' && ws.length < 3 ? 'recognition' : skill, reason: 'drill', phraseId: p.id };
   });
+}
+
+/**
+ * Sesión de escritura: repasos de escritura vencidos (los más olvidados primero) y
+ * hasta `newLimit` caracteres nuevos. Los nuevos salen de las palabras que ya practicas,
+ * primero los de la lista oficial de escritura (书写字) y los más frecuentes.
+ */
+export function buildWritingSession(
+  states: SkillState[],
+  retention: (s: SkillState) => number,
+  levels: number[],
+  now: number,
+  newLimit: number,
+  limit: number,
+): QueueItem[] {
+  const due = states
+    .filter((s) => s.skill === 'writing' && s.card && s.due !== null && s.due <= now)
+    .sort((a, b) => Number(b.weak) - Number(a.weak) || retention(a) - retention(b))
+    .map<QueueItem>((s) => ({ itemId: s.itemId, skill: 'writing', reason: s.weak ? 'weak' : 'due' }));
+  const hasWriting = new Set(states.filter((s) => s.skill === 'writing' && s.card).map((s) => s.itemId));
+  const practicedWords = new Set(states.filter((s) => s.card && itemKind(s.itemId) === 'w').map((s) => s.itemId));
+  const maxLevel = Math.max(...levels);
+  const fromWords = new Set<string>();
+  for (const w of words) if (practicedWords.has(wordItem(w.id))) for (const ch of w.chars) fromWords.add(ch);
+  // si aún no practicas palabras, empezar por los caracteres más frecuentes de tus niveles
+  const pool = fromWords.size ? [...fromWords] : chars.filter((c) => c.level <= maxLevel).map((c) => c.char);
+  const fresh = pool
+    .map((ch) => charByChar.get(ch)!)
+    .filter((c) => c && !hasWriting.has(charItem(c.char)))
+    .sort((a, b) => Number(b.handwritingLevel !== null) - Number(a.handwritingLevel !== null) || a.freqRank - b.freqRank)
+    .slice(0, newLimit)
+    .map<QueueItem>((c) => ({ itemId: charItem(c.char), skill: 'writing', reason: 'new' }));
+  return interleave(due.slice(0, limit - fresh.length), fresh, 2);
 }

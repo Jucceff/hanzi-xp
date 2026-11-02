@@ -1,6 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useMemo, useState } from 'react';
+import { WritingQuiz } from '../../ui/WritingQuiz';
 import { Link, useNavigate, useParams } from 'react-router';
-import { repo, useMastery, type Mastery } from '../../app/progress';
+import { answer, repo, useMastery, type Mastery } from '../../app/progress';
 import { charByChar, charItem, viewOf, wordById, wordItem } from '../../content';
 import type { ReviewLogEntry } from '../../core/engine';
 import { STAGE_LABEL, levelFromXp } from '../../core/mastery';
@@ -108,6 +110,7 @@ export function ItemPage() {
           <h2 className="section-title">Trazos y estructura</h2>
           <div className="card stack">
             <StrokeOrder char={char.char} />
+            <WritePractice char={char.char} id={id} hasCard={Boolean(m?.skills.writing?.direct)} />
             <dl className="kv">
               <dt>Radical</dt>
               <dd className="han">{char.radical}</dd>
@@ -160,6 +163,48 @@ export function ItemPage() {
         </>
       )}
     </article>
+  );
+}
+
+/** Practicar la escritura desde la ficha (cuenta como un repaso normal de escritura). */
+function WritePractice({ char, id, hasCard }: { char: string; id: ItemId; hasCard: boolean }) {
+  const [round, setRound] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const sessionId = useMemo(() => crypto.randomUUID(), []);
+  if (!open)
+    return (
+      <button type="button" className="btn primary" onClick={() => setOpen(true)}>
+        Practicar escritura
+      </button>
+    );
+  return (
+    <div className="stack" style={{ justifyItems: 'center', borderTop: '1px solid var(--line)', paddingTop: 12 }}>
+      <WritingQuiz
+        key={round}
+        char={char}
+        guided={!hasCard && round === 0}
+        onDone={async (r) => {
+          const out = await answer({ itemId: id, skill: 'writing', reason: hasCard ? 'due' : 'new' }, 'writing', r.grade, sessionId);
+          setMsg(`${out.delta >= 0 ? '+' : ''}${out.delta} XP de escritura`);
+        }}
+      />
+      {msg && (
+        <div className="row">
+          <span className="tag">{msg}</span>
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={() => {
+              setMsg(null);
+              setRound((n) => n + 1);
+            }}
+          >
+            Otra vez
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 

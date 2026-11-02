@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyDirect, applyPropagated, emptyXpState, propagatedDelta, spacingMultiplier, xpDelta } from './xp';
+import { applyDirect, applyPropagated, emptyXpState, propagatedDelta, spacingMultiplier, writingGrade, xpDelta } from './xp';
 
 describe('xpDelta', () => {
   it('escala por ejercicio y valoración', () => {
@@ -48,5 +48,22 @@ describe('propagación a caracteres', () => {
     expect(propagatedDelta(-2, false)).toBe(-1);
     const s = applyPropagated({ ...emptyXpState(), xp: 5, peakXp: 5 }, -1);
     expect(s).toMatchObject({ xp: 4, weak: false, wrong: 0 });
+  });
+});
+
+describe('escritura', () => {
+  const r = { mistakes: 0, strokes: 7, guided: false, gaveUp: false };
+  it('sin errores es Fácil; guiado como mucho Bien', () => {
+    expect(writingGrade(r)).toBe(4);
+    expect(writingGrade({ ...r, guided: true })).toBe(3);
+  });
+  it('los errores cuentan en proporción a los trazos', () => {
+    expect(writingGrade({ ...r, mistakes: 1 })).toBe(3); // 1/7
+    expect(writingGrade({ ...r, mistakes: 3 })).toBe(2); // 3/7
+    expect(writingGrade({ ...r, mistakes: 5 })).toBe(1); // 5/7
+    expect(writingGrade({ ...r, strokes: 2, mistakes: 1 })).toBe(2); // 1/2
+  });
+  it('rendirse o pedir pista es "Otra vez"', () => {
+    expect(writingGrade({ ...r, gaveUp: true })).toBe(1);
   });
 });

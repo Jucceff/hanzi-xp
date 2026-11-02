@@ -5,6 +5,7 @@ import { specFor, type ExerciseSpec } from '../../app/exercises';
 import { planSession, type SessionMode } from '../../app/plan';
 import { answer, readExposure, repo, useSettings } from '../../app/progress';
 import { IdentifyExercise, OrderExercise } from './SentenceExercises';
+import { WriteExercise } from './WriteExercise';
 import { requestSync } from '../../sync/sync';
 import { viewOf, wordById } from '../../content';
 import type { ReviewOutcome } from '../../core/engine';
@@ -144,6 +145,10 @@ function Exercise({ step, showPinyin, rate, onAnswer }: { step: Step; showPinyin
   const word = itemKind(step.q.itemId) === 'w' ? wordById.get(itemKey(step.q.itemId)) : undefined;
   const pinyinNum = word?.pinyinNum;
   const spec = step.spec;
+  if (spec.type === 'write') {
+    const kicker = `Escribe el carácter · ${SKILL_LABEL.writing}${step.q.reason === 'new' ? ' · nuevo' : ''}${step.retry ? ' · otra vez' : ''}`;
+    return <WriteExercise char={view.hanzi} guided={spec.guided} kicker={kicker} rate={rate} onAnswer={onAnswer} />;
+  }
   if (spec.type === 'order' || spec.type === 'identify') {
     const kicker = `${spec.type === 'order' ? 'Ordena la frase' : 'Encuentra en la frase'} · ${SKILL_LABEL[step.q.skill]}${step.retry ? ' · otra vez' : ''}`;
     return spec.type === 'order' ? (
