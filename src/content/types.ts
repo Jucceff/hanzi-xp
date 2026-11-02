@@ -6,8 +6,22 @@ export type HskLevel = 1 | 2 | 3;
 export type Tone = 1 | 2 | 3 | 4 | 5;
 export type ReviewStatus = 'pending' | 'ok';
 
+/** Palabra (o signo) de una frase segmentada. */
+export interface SentenceToken {
+  /** texto tal cual aparece */
+  t: string;
+  /** pinyin del token (vacío en la puntuación) */
+  p: string;
+  /** id de la palabra HSK, si lo es */
+  w?: string;
+  /** traducción de un nombre propio que no es del HSK (España, Shanghái…) */
+  g?: string;
+}
+
 export interface Example {
   zh: string;
+  /** frase segmentada en palabras HSK con su pinyin */
+  tokens?: SentenceToken[];
   pinyin: string;
   es: string;
   en?: string;
@@ -80,6 +94,18 @@ export interface GrammarPoint {
   title?: string;
   es?: string;
   review: ReviewStatus;
+}
+
+/** Frase útil del repertorio (data/authored/phrases.json). */
+export interface Phrase {
+  id: string;
+  zh: string;
+  es: string;
+  tema: string;
+  /** nivel HSK mínimo para entenderla (el de su palabra más difícil) */
+  level: HskLevel;
+  tokens: SentenceToken[];
+  pinyin: string;
 }
 
 export interface ContentMeta {

@@ -1,6 +1,6 @@
 {
   "version": "hsk2025-2026-11-02",
-  "generatedAt": "2026-11-02T15:06:55.949Z",
+  "generatedAt": "2026-11-02T15:41:36.614Z",
   "syllabus": "HSK 考试大纲 (CLEC, nov. 2025; en vigor desde jul. 2026) — chinesetest.cn",
   "counts": {
     "words1": 300,
@@ -9,7 +9,8 @@
     "chars1": 246,
     "chars2": 125,
     "chars3": 284,
-    "grammar": 244
+    "grammar": 244,
+    "phrases": 126
   },
   "sources": [
     {

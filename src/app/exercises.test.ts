@@ -25,6 +25,7 @@ describe('pares mínimos', () => {
   it('nunca ofrece homófonos al escuchar (他/她/它 suenan igual)', () => {
     for (let seed = 1; seed < 30; seed++) {
       const spec = specFor({ itemId: 'w:他', skill: 'listening', reason: 'due' }, { audio: true }, seeded(seed));
+      if (spec.type === 'identify') continue; // dentro de una frase no hay opciones que confundir
       if (spec.type !== 'choice') throw new Error('esperaba opción múltiple');
       expect(spec.options.filter((o) => ['他', '她', '它'].includes(o))).toEqual(['他']);
     }
@@ -73,5 +74,36 @@ describe('entrenamiento de tonos', () => {
     expect(q[0]).toEqual({ itemId: 'w:是', skill: 'listening', reason: 'drill' });
     expect(q.map((x) => x.skill)).toEqual(['listening', 'pinyin', 'listening', 'pinyin', 'listening', 'pinyin']);
     expect(q.slice(1).every((x) => minimalPairs(viewOf(x.itemId)!).length > 0)).toBe(true);
+  });
+});
+
+describe('frases', () => {
+  it('los ids del repertorio son únicos y cada frase es HSK 1–3', async () => {
+    const { phrases } = await import('../content');
+    expect(new Set(phrases.map((p) => p.id)).size).toBe(phrases.length);
+    expect(phrases.every((p) => p.tokens.every((t) => !t.p || t.w || t.g))).toBe(true);
+  });
+  it('ordenar: las fichas nunca vienen ya en orden y no incluyen la puntuación final', async () => {
+    const { phraseById, phraseSentence } = await import('../content');
+    const { orderTiles } = await import('./exercises');
+    const s = phraseSentence(phraseById.get('comer-y-beber-2')!); // 我们去吃饭吧。
+    for (let seed = 1; seed < 20; seed++) {
+      const tiles = orderTiles(s, seeded(seed));
+      expect(tiles.map((i) => s.tokens[i].t).join('')).not.toBe('我们去吃饭吧');
+      expect(tiles.some((i) => s.tokens[i].t === '。')).toBe(false);
+    }
+  });
+  it('la sesión de frases practica una palabra de cada frase', async () => {
+    const { phraseById } = await import('../content');
+    const { buildPhraseSession } = await import('./plan');
+    const q = buildPhraseSession([], () => 1, [1], 8, seeded(2));
+    expect(q).toHaveLength(8);
+    for (const item of q) {
+      const p = phraseById.get(item.phraseId!)!;
+      expect(p.level).toBe(1);
+      expect(p.tokens.some((t) => `w:${t.w}` === item.itemId)).toBe(true);
+      const spec = specFor(item, { audio: false }, seeded(4));
+      expect(['order', 'identify']).toContain(spec.type);
+    }
   });
 });

@@ -12,7 +12,8 @@ import { fileURLToPath } from 'node:url';
 import { pinyin as pinyinPro, polyphonic } from 'pinyin-pro';
 import { splitPinyin, toNumbered, toneOf } from '../../src/core/pinyin';
 import { isHan, segment } from '../../src/core/segment';
-import type { Char, ContentMeta, Example, GrammarPoint, HskLevel, Tone, Word } from '../../src/content/types';
+import type { Char, ContentMeta, Example, GrammarPoint, HskLevel, Phrase, SentenceToken, Tone, Word } from '../../src/content/types';
+import { plainKey } from '../../src/core/pinyin';
 import { validateAll } from './validate';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -234,6 +235,78 @@ for (const w of words) {
   }
 }
 
+// ───────────────────────── frases segmentadas ─────────────────────────
+// Nombres propios permitidos en frases (no son vocabulario HSK; nunca son objetivo de un ejercicio).
+const PROPER: Record<string, [string, string]> = {
+  西班牙: ['Xībānyá', 'España'],
+  墨西哥: ['Mòxīgē', 'México'],
+  上海: ['Shànghǎi', 'Shanghái'],
+  北京: ['Běijīng', 'Pekín'],
+  王明: ['Wáng Míng', 'Wang Ming (nombre)'],
+  李: ['Lǐ', 'Li (apellido)'],
+};
+const wordsBySimp = new Map<string, Word[]>();
+for (const w of words) {
+  if (!wordsBySimp.has(w.simp)) wordsBySimp.set(w.simp, []);
+  wordsBySimp.get(w.simp)!.push(w);
+}
+const tokenDict = new Set([...vocab, ...Object.keys(PROPER)]);
+
+/** Segmenta una frase en palabras HSK con su pinyin (oficial si es palabra del temario). */
+function tokenize(zh: string): { tokens: SentenceToken[]; unknown: string[]; level: number } {
+  const charPy = pinyinPro(zh, { type: 'array' });
+  const tokens: SentenceToken[] = [];
+  const unknown: string[] = [];
+  let level = 1;
+  let i = 0;
+  for (const { text } of segment(zh, tokenDict)) {
+    const n = [...text].length;
+    const py = charPy.slice(i, i + n);
+    i += n;
+    if (!isHan(text[0])) {
+      tokens.push({ t: text, p: '' });
+      continue;
+    }
+    if (PROPER[text]) {
+      tokens.push({ t: text, p: PROPER[text][0], g: PROPER[text][1] });
+      continue;
+    }
+    const cands = wordsBySimp.get(text);
+    if (!cands) {
+      unknown.push(text);
+      tokens.push({ t: text, p: py.join('') });
+      level = 99;
+      continue;
+    }
+    // homógrafos (得 de/dé/děi): el que coincide con la lectura en contexto; si no, el de menor nivel
+    const ctx = plainKey(py.join(''));
+    const w = cands.find((c) => plainKey(c.syllables.join('')) === ctx) ?? [...cands].sort((a, b) => a.level - b.level)[0];
+    tokens.push({ t: text, p: w.syllables.join(''), w: w.id });
+    level = Math.max(level, w.level);
+  }
+  return { tokens, unknown, level };
+}
+
+for (const w of words) for (const e of w.examples) e.tokens = tokenize(e.zh).tokens;
+
+type AuthoredPhrases = Record<string, [string, string][]>;
+const phrases: Phrase[] = [];
+for (const [tema, list] of Object.entries(readAuthored<AuthoredPhrases>('phrases.json', {}))) {
+  list.forEach(([zh, es], i) => {
+    const { tokens, unknown, level } = tokenize(zh);
+    if (unknown.length) {
+      problems.push(`Frase útil fuera del HSK 1–3 («${unknown.join('», «')}»): ${zh}`);
+      return;
+    }
+    const pinyin = tokens
+      .map((t) => t.p || t.t)
+      .join(' ')
+      .replace(/ ([，。？！、：；])/g, '$1');
+    const slug = tema.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z]+/g, '-');
+    phrases.push({ id: `${slug}-${i + 1}`, zh, es, tema, level: level as HskLevel, tokens, pinyin });
+  });
+}
+
 // ───────────────────────── caracteres ─────────────────────────
 const strokesDir = dirname(require.resolve('hanzi-writer-data/我.json'));
 const charList = [...recogLevel.keys()];
@@ -323,6 +396,7 @@ const meta: ContentMeta = {
     chars2: chars.filter((c) => c.level === 2).length,
     chars3: chars.filter((c) => c.level === 3).length,
     grammar: grammar.length,
+    phrases: phrases.length,
   },
   sources: [
     { name: 'Temario oficial HSK 3.0 (CLEC)', url: 'https://www.chinesetest.cn/', license: '© CLEC — lista oficial', use: 'Palabras, niveles, pinyin, categoría, caracteres, gramática' },
@@ -347,6 +421,8 @@ const write = (name: string, data: unknown) =>
 write('words.json', words);
 write('chars.json', chars);
 write('grammar.json', grammar);
+if (new Set(phrases.map((p) => p.id)).size !== phrases.length) errors.push('Ids de frases útiles duplicados');
+write('phrases.json', phrases);
 write('meta.json', meta);
 
 mkdirSync(STROKES_OUT, { recursive: true });
@@ -370,6 +446,7 @@ for (const w of words) {
 }
 for (const c of chars) addText(c.char + c.trad + c.pinyin.join('') + c.components.join('') + c.radical);
 for (const g of grammar) addText(g.content + g.officialExamples.join(''));
+for (const ph of phrases) addText(ph.zh + ph.pinyin);
 addText(' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüńňǹ’\'-·…');
 addText('，。？！、：；“”‘’（）《》—～·');
 const fontSrc = join(RAW, 'LXGWWenKai-Regular.ttf');
@@ -393,7 +470,7 @@ const report = [
   '|---|---|---|---|',
   ...[1, 2, 3].map((l) => `| HSK ${l} | ${count(l)} | ${meta.counts[`chars${l}`]} | ${chars.filter((c) => c.handwritingLevel === l).length} |`),
   '',
-  `Puntos de gramática HSK 1–3: ${grammar.length}. Ejemplos de Tatoeba asignados: ${tatoebaUsed}.`,
+  `Puntos de gramática HSK 1–3: ${grammar.length}. Ejemplos de Tatoeba asignados: ${tatoebaUsed}. Frases útiles: ${phrases.length} (HSK1 ${phrases.filter((p) => p.level === 1).length} · HSK2 ${phrases.filter((p) => p.level === 2).length} · HSK3 ${phrases.filter((p) => p.level === 3).length}).`,
   '',
   `## Errores bloqueantes (${errors.length})`,
   '',

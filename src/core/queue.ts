@@ -9,6 +9,8 @@ export interface QueueItem {
   itemId: ItemId;
   skill: Skill;
   reason: QueueReason;
+  /** practicar dentro de esta frase útil (sesión de frases) */
+  phraseId?: string;
 }
 
 export interface SessionOptions {

@@ -1,6 +1,6 @@
 # Reporte de huecos de datos
 
-Generado: 2026-11-02T15:06:55.949Z · versión `hsk2025-2026-11-02`
+Generado: 2026-11-02T15:41:36.614Z · versión `hsk2025-2026-11-02`
 
 ## Recuentos (temario oficial)
 
@@ -10,7 +10,7 @@ Generado: 2026-11-02T15:06:55.949Z · versión `hsk2025-2026-11-02`
 | HSK 2 | 200 | 125 | 100 |
 | HSK 3 | 500 | 284 | 150 |
 
-Puntos de gramática HSK 1–3: 244. Ejemplos de Tatoeba asignados: 1740.
+Puntos de gramática HSK 1–3: 244. Ejemplos de Tatoeba asignados: 1740. Frases útiles: 126 (HSK1 50 · HSK2 30 · HSK3 46).
 
 ## Errores bloqueantes (0)
 

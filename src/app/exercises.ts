@@ -1,5 +1,5 @@
 // Elige el tipo de ejercicio para cada elemento de la cola y genera distractores.
-import { chars, viewOf, words, wordById, type ItemView } from '../content';
+import { chars, phraseById, phraseSentence, sentenceWords, sentencesFor, viewOf, words, wordById, type ItemView, type Sentence } from '../content';
 import { markTone, plainKey, stripTones, toneOf } from '../core/pinyin';
 import type { QueueItem } from '../core/queue';
 import { itemKey, itemKind } from '../core/skills';
@@ -18,7 +18,14 @@ export type ExerciseSpec =
       xpKind: Exercise;
       /** pinyin sin tonos (ejercicio de tonos) */
       toneless?: string;
-    };
+    }
+  /** Ordenar las palabras de una frase a partir de su traducción. */
+  | { type: 'order'; sentence: Sentence; tiles: number[]; xpKind: Exercise }
+  /**
+   * Encontrar una palabra dentro de una frase. La pista es su significado, su hanzi
+   * (con la frase escrita en pinyin) o su sonido.
+   */
+  | { type: 'identify'; sentence: Sentence; target: string; cue: 'meaning' | 'hanzi' | 'audio'; show: 'hanzi' | 'pinyin'; xpKind: Exercise };
 
 export interface SpecOptions {
   /** hay voz zh-CN o audio nativo: se pueden usar ejercicios de escucha */
@@ -128,9 +135,55 @@ function toneSpec(view: ItemView, rnd: () => number): ExerciseSpec {
   };
 }
 
+/** Índices de las palabras de la frase, barajados (nunca en el orden correcto). */
+export function orderTiles(s: Sentence, rnd = Math.random): number[] {
+  const idx = s.tokens.map((_, i) => i).filter((i) => s.tokens[i].p);
+  // la puntuación final no se ordena
+  const words = idx.filter((i) => !/^[。？！]+$/.test(s.tokens[i].t));
+  const text = (order: number[]) => order.map((i) => s.tokens[i].t).join('');
+  for (let tries = 0; tries < 10; tries++) {
+    const sh = shuffle(words, rnd);
+    if (text(sh) !== text(words)) return sh;
+  }
+  return [...words].reverse();
+}
+
+/** Ejercicio con frase para una palabra, si hay frases adecuadas. */
+function sentenceSpec(q: QueueItem, opts: SpecOptions, rnd: () => number, force: boolean): ExerciseSpec | null {
+  if (itemKind(q.itemId) !== 'w') return null;
+  const wordId = itemKey(q.itemId);
+  const phrase = q.phraseId ? phraseById.get(q.phraseId) : undefined;
+  const pool = phrase ? [phraseSentence(phrase)] : sentencesFor(wordId);
+  if (!pool.length) return null;
+  // el repertorio de frases útiles va primero en la lista: se elige con más probabilidad
+  const sentence = pool[Math.floor(Math.pow(rnd(), 1.6) * pool.length)];
+  const p = force ? 0 : rnd(); // forzado = siempre con frase
+  switch (q.skill) {
+    case 'production':
+      if (p < 0.35 && sentenceWords(sentence).length >= 3) return { type: 'order', sentence, tiles: orderTiles(sentence, rnd), xpKind: 'sentence' };
+      return null;
+    case 'recognition':
+      if (p < 0.3) return { type: 'identify', sentence, target: wordId, cue: 'meaning', show: 'hanzi', xpKind: 'choice' };
+      return null;
+    case 'pinyin':
+      if (p < 0.3) return { type: 'identify', sentence, target: wordId, cue: 'hanzi', show: 'pinyin', xpKind: 'choice' };
+      return null;
+    case 'listening':
+      if (opts.audio && p < 0.3) return { type: 'identify', sentence, target: wordId, cue: 'audio', show: 'hanzi', xpKind: 'listening' };
+      return null;
+    default:
+      return null;
+  }
+}
+
 export function specFor(q: QueueItem, opts: SpecOptions = { audio: false }, rnd = Math.random): ExerciseSpec {
   const view = viewOf(q.itemId)!;
   const isNew = q.reason === 'new';
+  // las frases se usan al repasar (no el primer día) y siempre en la sesión de frases
+  if (!isNew || q.phraseId) {
+    const s = sentenceSpec(q, opts, rnd, Boolean(q.phraseId));
+    if (s) return s;
+  }
   const others = pool(view);
   if (q.skill === 'listening' && opts.audio) return listenSpec(view, others, rnd);
   if (q.skill === 'pinyin' && opts.audio && (q.reason === 'drill' || (!isNew && rnd() < 0.4))) return toneSpec(view, rnd);

@@ -99,6 +99,9 @@ export function Home() {
           <Icon name="play" />
           {loading ? 'Cargando…' : queue.length ? `Empezar sesión (${queue.length})` : 'Nada pendiente por hoy'}
         </Link>
+        <Link className="btn block" to="/sesion/frases">
+          Frases útiles <span className="han" aria-hidden="true">句</span>
+        </Link>
         <div className="grid-2">
           <Link className="btn" to="/sesion/debilidades" aria-disabled={!practicedAny} onClick={(e) => !practicedAny && e.preventDefault()}>
             Debilidades

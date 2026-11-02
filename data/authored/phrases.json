@@ -1,0 +1,530 @@
+{
+ "Saludos y cortesía": [
+  [
+   "你好！",
+   "¡Hola!"
+  ],
+  [
+   "早上好！",
+   "¡Buenos días!"
+  ],
+  [
+   "晚上好！",
+   "¡Buenas noches! (al saludar)"
+  ],
+  [
+   "好久不见！",
+   "¡Cuánto tiempo sin vernos!"
+  ],
+  [
+   "你最近怎么样？",
+   "¿Qué tal estás últimamente?"
+  ],
+  [
+   "我很好，谢谢。你呢？",
+   "Muy bien, gracias. ¿Y tú?"
+  ],
+  [
+   "谢谢你！",
+   "¡Gracias!"
+  ],
+  [
+   "不客气。",
+   "De nada."
+  ],
+  [
+   "对不起。",
+   "Lo siento."
+  ],
+  [
+   "没关系。",
+   "No pasa nada."
+  ],
+  [
+   "不好意思，我来晚了。",
+   "Perdona, he llegado tarde."
+  ],
+  [
+   "再见！",
+   "¡Adiós!"
+  ],
+  [
+   "明天见！",
+   "¡Hasta mañana!"
+  ],
+  [
+   "欢迎你来我家！",
+   "¡Bienvenido a mi casa!"
+  ]
+ ],
+ "Presentarse": [
+  [
+   "你叫什么名字？",
+   "¿Cómo te llamas?"
+  ],
+  [
+   "我叫王明。",
+   "Me llamo Wang Ming."
+  ],
+  [
+   "您贵姓？",
+   "¿Cuál es su apellido? (formal)"
+  ],
+  [
+   "我姓李。",
+   "Me apellido Li."
+  ],
+  [
+   "认识你很高兴。",
+   "Encantado de conocerte."
+  ],
+  [
+   "你是哪国人？",
+   "¿De qué país eres?"
+  ],
+  [
+   "我是西班牙人。",
+   "Soy español."
+  ],
+  [
+   "我来自墨西哥。",
+   "Soy de México."
+  ],
+  [
+   "你今年多大？",
+   "¿Cuántos años tienes?"
+  ],
+  [
+   "我今年二十五岁。",
+   "Tengo veinticinco años."
+  ],
+  [
+   "你做什么工作？",
+   "¿A qué te dedicas?"
+  ],
+  [
+   "我是学生，我在学习汉语。",
+   "Soy estudiante, estoy aprendiendo chino."
+  ],
+  [
+   "我会说一点儿汉语。",
+   "Hablo un poco de chino."
+  ]
+ ],
+ "Comer y beber": [
+  [
+   "我饿了。",
+   "Tengo hambre."
+  ],
+  [
+   "我们去吃饭吧。",
+   "Vamos a comer."
+  ],
+  [
+   "服务员，请给我们菜单。",
+   "Camarero, la carta, por favor."
+  ],
+  [
+   "你想吃什么？",
+   "¿Qué quieres comer?"
+  ],
+  [
+   "我要一个米饭和一个鸡蛋。",
+   "Quiero un arroz y un huevo."
+  ],
+  [
+   "我不吃肉。",
+   "No como carne."
+  ],
+  [
+   "这个菜很好吃！",
+   "¡Este plato está buenísimo!"
+  ],
+  [
+   "我要喝水。",
+   "Quiero agua."
+  ],
+  [
+   "你喝茶还是喝咖啡？",
+   "¿Tomas té o café?"
+  ],
+  [
+   "我吃饱了。",
+   "Estoy lleno."
+  ],
+  [
+   "一共多少钱？",
+   "¿Cuánto es en total?"
+  ],
+  [
+   "今天我请客。",
+   "Hoy invito yo."
+  ],
+  [
+   "请给我一双筷子。",
+   "Unos palillos, por favor."
+  ]
+ ],
+ "Compras": [
+  [
+   "这个多少钱？",
+   "¿Cuánto cuesta esto?"
+  ],
+  [
+   "太贵了！",
+   "¡Es demasiado caro!"
+  ],
+  [
+   "能便宜一点儿吗？",
+   "¿Me lo deja un poco más barato?"
+  ],
+  [
+   "我想买这件衣服。",
+   "Quiero comprar esta prenda."
+  ],
+  [
+   "有没有大一点儿的？",
+   "¿Hay uno un poco más grande?"
+  ],
+  [
+   "我可以试一下吗？",
+   "¿Me lo puedo probar?"
+  ],
+  [
+   "这件衣服很合适。",
+   "Esta prenda me queda muy bien."
+  ],
+  [
+   "可以用信用卡吗？",
+   "¿Puedo pagar con tarjeta de crédito?"
+  ],
+  [
+   "我只是看看。",
+   "Solo estoy mirando."
+  ],
+  [
+   "你们几点开门？",
+   "¿A qué hora abren?"
+  ],
+  [
+   "超市在哪儿？",
+   "¿Dónde está el supermercado?"
+  ]
+ ],
+ "Direcciones y transporte": [
+  [
+   "请问，洗手间在哪儿？",
+   "Disculpe, ¿dónde está el baño?"
+  ],
+  [
+   "去火车站怎么走？",
+   "¿Cómo se va a la estación de tren?"
+  ],
+  [
+   "一直往前走，然后往左。",
+   "Todo recto y luego a la izquierda."
+  ],
+  [
+   "在第二个路口往右走。",
+   "En el segundo cruce gira a la derecha."
+  ],
+  [
+   "离这儿远吗？",
+   "¿Está lejos de aquí?"
+  ],
+  [
+   "走路要十分钟。",
+   "A pie son diez minutos."
+  ],
+  [
+   "我们坐地铁去吧。",
+   "Vamos en metro."
+  ],
+  [
+   "请带我去机场。",
+   "Lléveme al aeropuerto, por favor."
+  ],
+  [
+   "我要一张去上海的票。",
+   "Quiero un billete a Shanghái."
+  ],
+  [
+   "这辆公交车去学校吗？",
+   "¿Este autobús va a la escuela?"
+  ],
+  [
+   "我们打车吧。",
+   "Cojamos un taxi."
+  ],
+  [
+   "我找不到我的护照。",
+   "No encuentro mi pasaporte."
+  ]
+ ],
+ "Hora y fechas": [
+  [
+   "现在几点？",
+   "¿Qué hora es?"
+  ],
+  [
+   "现在三点半。",
+   "Son las tres y media."
+  ],
+  [
+   "今天几月几号？",
+   "¿Qué fecha es hoy?"
+  ],
+  [
+   "今天星期几？",
+   "¿Qué día de la semana es hoy?"
+  ],
+  [
+   "我们几点见面？",
+   "¿A qué hora quedamos?"
+  ],
+  [
+   "明天上午九点，可以吗？",
+   "Mañana a las nueve, ¿te va bien?"
+  ],
+  [
+   "你的生日是哪天？",
+   "¿Cuándo es tu cumpleaños?"
+  ],
+  [
+   "我等了你半个小时。",
+   "Te he esperado media hora."
+  ],
+  [
+   "对不起，我没有时间。",
+   "Lo siento, no tengo tiempo."
+  ],
+  [
+   "周末你有时间吗？",
+   "¿Tienes tiempo el fin de semana?"
+  ]
+ ],
+ "Planes y tiempo libre": [
+  [
+   "你周末想做什么？",
+   "¿Qué quieres hacer el fin de semana?"
+  ],
+  [
+   "我们一起去看电影吧。",
+   "Vamos juntos al cine."
+  ],
+  [
+   "我喜欢听音乐和看书。",
+   "Me gusta escuchar música y leer."
+  ],
+  [
+   "你的爱好是什么？",
+   "¿Cuáles son tus aficiones?"
+  ],
+  [
+   "好的，可以！",
+   "¡Vale, de acuerdo!"
+  ],
+  [
+   "我们在哪儿见面？",
+   "¿Dónde quedamos?"
+  ],
+  [
+   "我在门口等你。",
+   "Te espero en la puerta."
+  ],
+  [
+   "你想去哪儿旅游？",
+   "¿Adónde quieres ir de viaje?"
+  ],
+  [
+   "这个地方很漂亮。",
+   "Este lugar es muy bonito."
+  ],
+  [
+   "我们在这儿照相吧。",
+   "Hagamos una foto aquí."
+  ]
+ ],
+ "Salud": [
+  [
+   "我不舒服。",
+   "No me encuentro bien."
+  ],
+  [
+   "我头疼。",
+   "Me duele la cabeza."
+  ],
+  [
+   "我发烧了。",
+   "Tengo fiebre."
+  ],
+  [
+   "我感冒了。",
+   "Estoy resfriado."
+  ],
+  [
+   "你应该去医院看看。",
+   "Deberías ir al hospital a que te vean."
+  ],
+  [
+   "附近有药店吗？",
+   "¿Hay una farmacia cerca?"
+  ],
+  [
+   "多喝水，好好休息。",
+   "Bebe mucha agua y descansa bien."
+  ],
+  [
+   "你身体好一点儿了吗？",
+   "¿Te encuentras un poco mejor?"
+  ],
+  [
+   "我要请假。",
+   "Tengo que pedir el día libre."
+  ]
+ ],
+ "Clase y estudio": [
+  [
+   "老师，我有一个问题。",
+   "Profesor, tengo una pregunta."
+  ],
+  [
+   "这个字怎么读？",
+   "¿Cómo se lee este carácter?"
+  ],
+  [
+   "这个词是什么意思？",
+   "¿Qué significa esta palabra?"
+  ],
+  [
+   "请再说一遍。",
+   "Por favor, repítelo."
+  ],
+  [
+   "请说慢一点儿。",
+   "Por favor, habla más despacio."
+  ],
+  [
+   "我听不懂。",
+   "No lo entiendo (al oírlo)."
+  ],
+  [
+   "我明白了。",
+   "Ya lo entiendo."
+  ],
+  [
+   "用汉语怎么说？",
+   "¿Cómo se dice en chino?"
+  ],
+  [
+   "明天有考试，我要复习。",
+   "Mañana hay examen, tengo que repasar."
+  ],
+  [
+   "你的汉语说得很好！",
+   "¡Hablas muy bien chino!"
+  ]
+ ],
+ "Casa y familia": [
+  [
+   "你家有几口人？",
+   "¿Cuántas personas sois en tu familia?"
+  ],
+  [
+   "我家有四口人。",
+   "En mi familia somos cuatro."
+  ],
+  [
+   "我有一个哥哥和一个妹妹。",
+   "Tengo un hermano mayor y una hermana menor."
+  ],
+  [
+   "你住在哪儿？",
+   "¿Dónde vives?"
+  ],
+  [
+   "我住在学校附近。",
+   "Vivo cerca de la escuela."
+  ],
+  [
+   "我们下个月搬家。",
+   "Nos mudamos el mes que viene."
+  ],
+  [
+   "我妈妈做饭做得很好。",
+   "Mi madre cocina muy bien."
+  ],
+  [
+   "你有没有孩子？",
+   "¿Tienes hijos?"
+  ],
+  [
+   "我养了一只猫。",
+   "Tengo un gato."
+  ]
+ ],
+ "Clima": [
+  [
+   "今天天气怎么样？",
+   "¿Qué tiempo hace hoy?"
+  ],
+  [
+   "今天很热。",
+   "Hoy hace mucho calor."
+  ],
+  [
+   "外面下雨了，带伞吧。",
+   "Fuera llueve, coge el paraguas."
+  ],
+  [
+   "明天会下雪吗？",
+   "¿Nevará mañana?"
+  ],
+  [
+   "今天是晴天。",
+   "Hoy hace sol."
+  ],
+  [
+   "天气越来越冷了。",
+   "Cada vez hace más frío."
+  ]
+ ],
+ "Problemas y ayuda": [
+  [
+   "你能帮我一下吗？",
+   "¿Me puedes ayudar un momento?"
+  ],
+  [
+   "我的手机坏了。",
+   "Se me ha estropeado el móvil."
+  ],
+  [
+   "我找不到路了。",
+   "Me he perdido."
+  ],
+  [
+   "放心，我来帮你。",
+   "Tranquilo, te ayudo yo."
+  ],
+  [
+   "别着急，慢慢来。",
+   "No te agobies, poco a poco."
+  ],
+  [
+   "怎么办？",
+   "¿Qué hacemos?"
+  ],
+  [
+   "我忘了我的电话号码。",
+   "He olvidado mi número de teléfono."
+  ],
+  [
+   "请给我打电话。",
+   "Llámame, por favor."
+  ],
+  [
+   "小心！",
+   "¡Cuidado!"
+  ]
+ ]
+}

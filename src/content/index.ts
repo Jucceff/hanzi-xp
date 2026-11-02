@@ -1,13 +1,16 @@
 // Contenido estático (generado por `npm run data`) e índices de acceso.
 import charsJson from '../../data/build/chars.json';
 import metaJson from '../../data/build/meta.json';
+import phrasesJson from '../../data/build/phrases.json';
 import wordsJson from '../../data/build/words.json';
 import { charItem, itemKey, itemKind, wordItem, type ItemId } from '../core/skills';
-import type { Char, ContentMeta, HskLevel, Word } from './types';
+import type { Char, ContentMeta, HskLevel, Phrase, SentenceToken, Word } from './types';
 
 export const words = wordsJson as Word[];
 export const chars = charsJson as Char[];
 export const meta = metaJson as ContentMeta;
+export const phrases = phrasesJson as Phrase[];
+export const phraseById = new Map(phrases.map((p) => [p.id, p]));
 
 export const wordById = new Map(words.map((w) => [w.id, w]));
 export const charByChar = new Map(chars.map((c) => [c.char, c]));
@@ -57,5 +60,41 @@ export function viewOf(id: ItemId): ItemView | undefined {
   return { id, kind: 'c', hanzi: c.char, pinyin: c.pinyin[0] ?? '', meaning: meanings[0], meanings, level: c.level, chars: [c.char] };
 }
 
+/** Frase lista para ejercicios (de un ejemplo o del repertorio de frases útiles). */
+export interface Sentence {
+  zh: string;
+  es: string;
+  tokens: SentenceToken[];
+  phraseId?: string;
+}
+
+const isPunct = (t: SentenceToken) => !t.p;
+/** Palabras de la frase (sin puntuación). */
+export const sentenceWords = (s: Sentence) => s.tokens.filter((t) => !isPunct(t));
+
+/** Útil para ejercicios: todas sus palabras son HSK (o nombres propios conocidos) y tiene 2–9 palabras. */
+function usable(tokens: SentenceToken[] | undefined): tokens is SentenceToken[] {
+  if (!tokens) return false;
+  const ws = tokens.filter((t) => !isPunct(t));
+  return ws.length >= 2 && ws.length <= 9 && ws.every((t) => t.w || t.g);
+}
+
+/** Frases donde aparece la palabra: primero las frases útiles, luego los ejemplos. */
+export function sentencesFor(wordId: string): Sentence[] {
+  const w = wordById.get(wordId);
+  if (!w) return [];
+  const fromPhrases = phrases
+    .filter((p) => p.tokens.some((t) => t.w === wordId) && usable(p.tokens))
+    .map((p) => ({ zh: p.zh, es: p.es, tokens: p.tokens, phraseId: p.id }));
+  const fromExamples = w.examples
+    .filter((e) => usable(e.tokens) && e.tokens!.some((t) => t.w === wordId))
+    .map((e) => ({ zh: e.zh, es: e.es, tokens: e.tokens! }));
+  return [...fromPhrases, ...fromExamples];
+}
+
+export function phraseSentence(p: Phrase): Sentence {
+  return { zh: p.zh, es: p.es, tokens: p.tokens, phraseId: p.id };
+}
+
 export { charItem, wordItem };
-export type { Char, Word };
+export type { Char, Phrase, Word };

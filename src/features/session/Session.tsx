@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router';
 import { audioReady, say } from '../../app/audio';
 import { specFor, type ExerciseSpec } from '../../app/exercises';
 import { planSession, type SessionMode } from '../../app/plan';
-import { answer, repo, useSettings } from '../../app/progress';
+import { answer, readExposure, repo, useSettings } from '../../app/progress';
+import { IdentifyExercise, OrderExercise } from './SentenceExercises';
 import { requestSync } from '../../sync/sync';
 import { viewOf, wordById } from '../../content';
 import type { ReviewOutcome } from '../../core/engine';
@@ -67,6 +68,12 @@ export function Session() {
       if (!steps) return;
       const step = steps[index];
       const outcome = await answer(step.q, step.spec.xpKind, grade, sessionId);
+      // leer la frase completa también cuenta: +1 de reconocimiento a los demás caracteres
+      if (grade > 1 && (step.spec.type === 'order' || step.spec.type === 'identify')) {
+        const target = itemKey(step.q.itemId);
+        const others = step.spec.sentence.tokens.filter((t) => t.w && t.w !== target).flatMap((t) => [...t.t]);
+        if (others.length) void readExposure(others, sessionId);
+      }
       setResults((r) => [...r, { q: step.q, correct: grade > 1, outcome }]);
       setToast({ key: Date.now(), outcome });
       if (grade === 1 && !step.retry) {
@@ -137,6 +144,14 @@ function Exercise({ step, showPinyin, rate, onAnswer }: { step: Step; showPinyin
   const word = itemKind(step.q.itemId) === 'w' ? wordById.get(itemKey(step.q.itemId)) : undefined;
   const pinyinNum = word?.pinyinNum;
   const spec = step.spec;
+  if (spec.type === 'order' || spec.type === 'identify') {
+    const kicker = `${spec.type === 'order' ? 'Ordena la frase' : 'Encuentra en la frase'} · ${SKILL_LABEL[step.q.skill]}${step.retry ? ' · otra vez' : ''}`;
+    return spec.type === 'order' ? (
+      <OrderExercise spec={spec} kicker={kicker} showPinyin={showPinyin} rate={rate} onAnswer={onAnswer} />
+    ) : (
+      <IdentifyExercise spec={spec} kicker={kicker} showPinyin={showPinyin} rate={rate} onAnswer={onAnswer} />
+    );
+  }
   const label = spec.type === 'flash' ? PROMPT_LABEL[`flash-${spec.front}`] : PROMPT_LABEL[`${spec.prompt}-${spec.answer}`];
   const promptKind = spec.type === 'flash' ? spec.front : spec.prompt;
   // en ejercicios de pinyin nunca se muestra el pinyin en el enunciado

@@ -82,3 +82,30 @@ test('exportar e importar el progreso', async ({ page, context }) => {
   await fresh.locator('input[type=file]').setInputFiles(path);
   await expect(fresh.getByRole('status')).toContainText(`Importado: ${backup.skillStates.length} estados`);
 });
+
+test('sesión de frases útiles: ordenar y encontrar palabras', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Frases útiles/ }).click();
+  const summary = page.getByRole('heading', { name: 'Sesión terminada' });
+  let ordered = 0;
+  let identified = 0;
+  for (let i = 0; i < 30; i++) {
+    await page.locator('.bank .tile-word').or(page.locator('.tok[data-correct]')).or(summary).first().waitFor();
+    if (await summary.isVisible()) break;
+    if (await page.locator('.bank .tile-word').count()) {
+      while (await page.locator('.bank .tile-word').count()) await page.locator('.bank .tile-word').first().click();
+      await page.getByRole('button', { name: 'Comprobar' }).click();
+      await page.getByRole('button', { name: /Continuar/ }).click();
+      ordered++;
+    } else {
+      await page.locator('.tok[data-correct]').first().click();
+      await expect(page.locator('.sentence-reveal')).toBeVisible();
+      await page.getByRole('button', { name: /Continuar/ }).click();
+      identified++;
+    }
+    await page.waitForTimeout(150);
+  }
+  await expect(summary).toBeVisible();
+  expect(ordered).toBeGreaterThan(0);
+  expect(identified).toBeGreaterThan(0);
+});

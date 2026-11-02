@@ -848,6 +848,125 @@ a {
   transform: scale(0.97);
 }
 
+/* frases */
+.build-line {
+  width: 100%;
+  min-height: 74px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border-bottom: 2px dashed var(--line-2);
+}
+.build-line.ok {
+  border-bottom-color: var(--jade);
+}
+.build-line.bad {
+  border-bottom-color: var(--seal);
+}
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+.tile-word,
+.tok {
+  appearance: none;
+  border: 1.5px solid var(--line-2);
+  background: var(--card);
+  border-radius: 10px;
+  padding: 6px 12px 8px;
+  min-height: 48px;
+  min-width: 44px;
+  display: inline-grid;
+  justify-items: center;
+  align-content: end;
+  gap: 1px;
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--line);
+}
+.tile-word .han,
+.tok.han {
+  font-size: 26px;
+  line-height: 1.15;
+}
+.tile-word .py,
+.tok .py {
+  font-size: 12px;
+  line-height: 1;
+}
+.tile-word:disabled {
+  cursor: default;
+}
+.tok.tok-py {
+  font-family: var(--font-han);
+  font-size: 19px;
+  color: var(--ink);
+}
+.tok[data-state='correct'] {
+  border-color: var(--jade);
+  background: var(--jade-bg);
+}
+.tok[data-state='wrong'] {
+  border-color: var(--seal);
+  background: var(--wrong-bg);
+}
+.sentence-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+.sentence-tokens .punct,
+.build-line .punct {
+  font-size: 24px;
+  padding-bottom: 8px;
+}
+.sentence-reveal {
+  background: var(--paper-2);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+  text-align: left;
+}
+.ruby-line {
+  margin: 0;
+  font-size: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 4px;
+  align-items: flex-end;
+}
+.ruby {
+  display: inline-grid;
+  justify-items: center;
+  line-height: 1.15;
+}
+.ruby small {
+  font-size: 11px;
+  min-height: 12px;
+}
+.ruby.hl {
+  color: var(--seal);
+}
+.es-line {
+  margin: 6px 0 0;
+  font-weight: 600;
+}
+.listen-btn.small {
+  width: 72px;
+  height: 72px;
+}
+.listen-btn.small svg {
+  width: 30px;
+  height: 30px;
+}
+
 /* ───────── ficha ───────── */
 .item-head {
   display: grid;
