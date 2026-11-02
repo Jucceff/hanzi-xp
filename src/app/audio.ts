@@ -91,3 +91,17 @@ export function useVoiceAvailable() {
     () => true,
   );
 }
+
+/** Espera (como mucho `ms`) a que el navegador cargue las voces; true si hay audio chino. */
+export function audioReady(ms = 1500): Promise<boolean> {
+  if (tts.available() || nativeAudio.available()) return Promise.resolve(true);
+  return new Promise((resolve) => {
+    const done = (v: boolean) => {
+      clearTimeout(t);
+      off();
+      resolve(v);
+    };
+    const off = tts.subscribe(() => tts.available() && done(true));
+    const t = setTimeout(() => done(tts.available()), ms);
+  });
+}

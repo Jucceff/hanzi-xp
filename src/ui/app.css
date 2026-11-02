@@ -825,6 +825,29 @@ a {
   }
 }
 
+.listen-btn {
+  appearance: none;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  border: 1.5px solid var(--grid);
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--seal) 14%, transparent) 0 55%, transparent 56%),
+    var(--card);
+  color: var(--seal);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.listen-btn svg {
+  width: 44px;
+  height: 44px;
+}
+.listen-btn:active {
+  transform: scale(0.97);
+}
+
 /* ───────── ficha ───────── */
 .item-head {
   display: grid;

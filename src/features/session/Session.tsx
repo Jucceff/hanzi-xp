@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
-import { say } from '../../app/audio';
+import { audioReady, say } from '../../app/audio';
 import { specFor, type ExerciseSpec } from '../../app/exercises';
 import { planSession, type SessionMode } from '../../app/plan';
 import { answer, repo, useSettings } from '../../app/progress';
@@ -29,9 +29,11 @@ interface Result {
 const PROMPT_LABEL: Record<string, string> = {
   'flash-hanzi': '¿Qué significa?',
   'flash-meaning': '¿Cómo se escribe?',
-  'choice-meaning': 'Elige el significado',
-  'choice-pinyin': 'Elige el pinyin con su tono',
-  'choice-hanzi': 'Elige el hanzi',
+  'hanzi-meaning': 'Elige el significado',
+  'hanzi-pinyin': 'Elige el pinyin con su tono',
+  'meaning-hanzi': 'Elige el hanzi',
+  'audio-hanzi': 'Escucha y elige el hanzi',
+  'audio-pinyin-pinyin': 'Escucha y elige los tonos',
 };
 
 export function Session() {
@@ -42,15 +44,18 @@ export function Session() {
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<Result[]>([]);
   const [toast, setToast] = useState<{ key: number; outcome: ReviewOutcome } | null>(null);
+  const [audio, setAudio] = useState(false);
   const sessionId = useMemo(() => crypto.randomUUID(), []);
 
   // La cola se calcula una sola vez al entrar (no se re-planifica a mitad de sesión).
   useEffect(() => {
     let alive = true;
     (async () => {
-      const [states, s, daily, scheduler] = await Promise.all([repo.allStates(), repo.getSettings(), repo.daily(), getScheduler()]);
-      const queue = planSession(mode as SessionMode, states, s, daily, scheduler);
-      if (alive) setSteps(queue.map((q) => ({ q, spec: specFor(q) })));
+      const [states, s, daily, scheduler, hasAudio] = await Promise.all([repo.allStates(), repo.getSettings(), repo.daily(), getScheduler(), audioReady()]);
+      const queue = planSession(mode as SessionMode, states, s, daily, scheduler, { audio: hasAudio });
+      if (!alive) return;
+      setAudio(hasAudio);
+      setSteps(queue.map((q) => ({ q, spec: specFor(q, { audio: hasAudio }) })));
     })();
     return () => {
       alive = false;
@@ -68,13 +73,13 @@ export function Session() {
         // un fallo vuelve a aparecer unas tarjetas más tarde (una sola vez)
         setSteps((s) => {
           const copy = [...s!];
-          copy.splice(Math.min(copy.length, index + 4), 0, { q: step.q, spec: specFor(step.q), retry: true });
+          copy.splice(Math.min(copy.length, index + 4), 0, { q: step.q, spec: specFor(step.q, { audio }), retry: true });
           return copy;
         });
       }
       setIndex((i) => i + 1);
     },
-    [steps, index, sessionId],
+    [steps, index, sessionId, audio],
   );
 
   if (!steps) return <div className="session" aria-busy="true" />;
@@ -107,7 +112,13 @@ export function Session() {
 
       {steps.length === 0 ? (
         <div className="prompt">
-          <Empty han="闲">{mode === 'debilidades' ? 'Aún no hay nada practicado que reforzar.' : 'No hay nada pendiente ahora mismo.'}</Empty>
+          <Empty han="闲">
+            {mode === 'debilidades'
+              ? 'Aún no hay nada practicado que reforzar.'
+              : mode === 'tonos' && !audio
+                ? 'El entrenamiento de tonos necesita una voz china en el dispositivo.'
+                : 'No hay nada pendiente ahora mismo.'}
+          </Empty>
           <Link className="btn" to="/">
             Volver
           </Link>
@@ -126,8 +137,8 @@ function Exercise({ step, showPinyin, rate, onAnswer }: { step: Step; showPinyin
   const word = itemKind(step.q.itemId) === 'w' ? wordById.get(itemKey(step.q.itemId)) : undefined;
   const pinyinNum = word?.pinyinNum;
   const spec = step.spec;
-  const label = spec.type === 'flash' ? PROMPT_LABEL[`flash-${spec.front}`] : PROMPT_LABEL[`choice-${spec.answer}`];
-  const promptIsHanzi = spec.type === 'flash' ? spec.front === 'hanzi' : spec.prompt === 'hanzi';
+  const label = spec.type === 'flash' ? PROMPT_LABEL[`flash-${spec.front}`] : PROMPT_LABEL[`${spec.prompt}-${spec.answer}`];
+  const promptKind = spec.type === 'flash' ? spec.front : spec.prompt;
   // en ejercicios de pinyin nunca se muestra el pinyin en el enunciado
   const pinyinOnPrompt = showPinyin && step.q.skill !== 'pinyin' && step.q.skill !== 'production';
 
@@ -138,13 +149,15 @@ function Exercise({ step, showPinyin, rate, onAnswer }: { step: Step; showPinyin
         {step.q.reason === 'new' && ' · nueva'}
         {step.retry && ' · otra vez'}
       </span>
-      {promptIsHanzi ? (
+      {promptKind === 'hanzi' ? (
         <>
           <div className={`mizige big-han han${view.hanzi.length > 2 ? ' long' : ''}`} lang="zh-CN">
             {view.hanzi}
           </div>
           {pinyinOnPrompt && spec.type === 'choice' && <div className="py" style={{ fontSize: 22 }}>{view.pinyin}</div>}
         </>
+      ) : promptKind === 'audio' || promptKind === 'audio-pinyin' ? (
+        <AudioPrompt text={view.hanzi} pinyinNum={pinyinNum} rate={rate} toneless={spec.type === 'choice' ? spec.toneless : undefined} />
       ) : (
         <div className="meaning-prompt">{view.meanings.slice(0, 2).join(' · ')}</div>
       )}
@@ -159,6 +172,29 @@ function Exercise({ step, showPinyin, rate, onAnswer }: { step: Step; showPinyin
 }
 
 type ViewT = NonNullable<ReturnType<typeof viewOf>>;
+
+/** Enunciado de escucha: suena al aparecer; se puede repetir normal o despacio. */
+function AudioPrompt({ text, pinyinNum, rate, toneless }: { text: string; pinyinNum?: string; rate: number; toneless?: string }) {
+  useEffect(() => {
+    const t = setTimeout(() => say(text, pinyinNum, rate), 250);
+    return () => clearTimeout(t);
+  }, [text, pinyinNum, rate]);
+  return (
+    <div className="stack" style={{ justifyItems: 'center', gap: 14 }}>
+      <button type="button" className="listen-btn" aria-label="Escuchar otra vez" onClick={() => say(text, pinyinNum, rate)}>
+        <Icon name="sound" />
+      </button>
+      <button type="button" className="btn ghost" onClick={() => say(text, pinyinNum, Math.max(0.5, rate - 0.3))}>
+        Más despacio
+      </button>
+      {toneless && (
+        <div className="py" style={{ fontSize: 30, letterSpacing: '0.04em' }} aria-label={`Pinyin sin tonos: ${toneless}`}>
+          {toneless}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function AnswerBlock({ view, pinyinNum, rate }: { view: ViewT; pinyinNum?: string; rate: number }) {
   return (
@@ -245,6 +281,7 @@ function Choice({ spec, view, pinyinNum, rate, prompt, onAnswer }: { spec: Extra
     else if (picked !== null && (k === 'Enter' || k === ' ')) next();
   });
   const cls = spec.answer === 'hanzi' ? 'han-opt han' : spec.answer === 'pinyin' ? 'py-opt' : '';
+  // en los ejercicios de escucha el audio ya suena en el enunciado; al elegir se repite
   return (
     <>
       {prompt}

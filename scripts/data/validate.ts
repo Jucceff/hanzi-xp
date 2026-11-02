@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Char, Word } from '../../src/content/types';
 
 /** Niveles cuya capa en español ya debe estar completa (se amplía por fases). */
-export const REQUIRED_ES_LEVELS = [1];
+export const REQUIRED_ES_LEVELS = [1, 2, 3];
 
 const syllable = z.string().regex(/^[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüńňǹḿ]+$/, 'sílaba inválida');
 

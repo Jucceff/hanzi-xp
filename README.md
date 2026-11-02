@@ -20,8 +20,12 @@ npm run build        # build de producción + service worker
 | Construir | `npm run data` | Genera `data/build/*.json`, `public/strokes/`, la tipografía subconjuntada y `reports/data-gaps.md` |
 
 - **Lista oficial**: temario HSK 3.0 publicado por el CLEC en nov. 2025 (en vigor desde jul. 2026), leído de la API de chinesetest.cn: HSK 1 = 300 palabras / 246 caracteres, HSK 2 = +200 / +125, HSK 3 = +500 / +284; gramática 70 / 78 / 96 puntos.
-- **Capa en español** (`data/authored/`): significados, caracteres y ejemplos redactados con ayuda de IA y marcados `review: pending`; los ejemplos de Tatoeba se eligen solo si todo su vocabulario es del mismo nivel o inferior.
+- **Capa en español** (`data/authored/`): significados de las 1000 palabras y 655 caracteres, y ≥2 ejemplos por palabra, redactados con ayuda de IA y marcados `review: pending`. Los ejemplos (de Tatoeba o redactados) solo usan vocabulario del mismo nivel HSK o inferior; el build lo comprueba.
 - El build **falla** si falta pinyin, tono o traducción en los niveles marcados como completos (`REQUIRED_ES_LEVELS` en `scripts/data/validate.ts`).
+
+## Ejercicios
+
+Flashcards (ambas direcciones), opción múltiple (hanzi→significado, significado→hanzi, hanzi→pinyin), escucha (oír → elegir el hanzi, con pares mínimos y sin homófonos) y tonos (oír → elegir los tonos sobre el pinyin sin tonos). La escucha se desbloquea para las palabras vistas un día anterior y requiere una voz zh-CN en el dispositivo. Modos: sesión diaria, debilidades y entrenamiento de tonos.
 
 ## Modelo de progreso
 

@@ -3,7 +3,7 @@ import type { SkillState } from './engine';
 import { itemEffectiveXp, type SkillSnapshot } from './mastery';
 import { itemKind, type ItemId, type Skill } from './skills';
 
-export type QueueReason = 'due' | 'weak' | 'new' | 'weakness';
+export type QueueReason = 'due' | 'weak' | 'new' | 'weakness' | 'drill';
 
 export interface QueueItem {
   itemId: ItemId;
@@ -21,6 +21,12 @@ export interface SessionOptions {
   /** habilidades que este tipo de sesión puede practicar */
   skills: readonly Skill[];
   retention: (s: SkillState) => number;
+  /**
+   * Habilidades que se "desbloquean" para ítems ya conocidos (p. ej. la escucha):
+   * se añaden para ítems cuyo reconocimiento se repasó antes de `before` y que aún no
+   * tienen tarjeta en esa habilidad, como máximo `limit` por sesión.
+   */
+  unlock?: { skills: readonly Skill[]; limit: number; before: number };
 }
 
 /** Habilidades con que se presenta un ítem nuevo, en orden. */
@@ -43,6 +49,23 @@ export function buildDailySession(o: SessionOptions): QueueItem[] {
   for (const skill of NEW_ITEM_SKILLS) {
     if (!allowed.has(skill)) continue;
     for (const itemId of fresh) newItems.push({ itemId, skill, reason: 'new' });
+  }
+  if (o.unlock) {
+    const has = new Set(o.states.filter((s) => s.card).map((s) => `${s.itemId}|${s.skill}`));
+    const seenBefore = o.states
+      .filter((s) => s.skill === 'recognition' && s.card?.lastReviewAt && s.card.lastReviewAt.getTime() < o.unlock!.before)
+      .map((s) => s.itemId);
+    let n = 0;
+    for (const skill of o.unlock.skills) {
+      if (!allowed.has(skill)) continue;
+      for (const itemId of seenBefore) {
+        if (n >= o.unlock.limit) break;
+        if (!has.has(`${itemId}|${skill}`)) {
+          newItems.push({ itemId, skill, reason: 'new' });
+          n++;
+        }
+      }
+    }
   }
   return interleave(due, newItems, 3);
 }

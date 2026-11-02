@@ -20,12 +20,13 @@ export function Home() {
   const goalPct = Math.min(100, Math.round((todayXp / settings.dailyGoalXp) * 100));
 
   const queue = useMemo(
-    () => (states && scheduler ? planSession('hoy', states, settings, daily, scheduler) : []),
-    [states, scheduler, settings, daily],
+    () => (states && scheduler ? planSession('hoy', states, settings, daily, scheduler, { audio: voice }) : []),
+    [states, scheduler, settings, daily, voice],
   );
   const dueCount = queue.filter((q) => q.reason !== 'new').length;
   const newCount = new Set(queue.filter((q) => q.reason === 'new').map((q) => q.itemId)).size;
   const practicedAny = states?.some((s) => s.card) ?? false;
+  const loading = !states || !scheduler;
 
   const weakest = useMemo(() => {
     if (!mastery) return [];
@@ -71,7 +72,7 @@ export function Home() {
               {goalPct >= 100 ? '¡Meta cumplida!' : todayXp ? 'Sigue así' : 'Hoy toca'}
             </h1>
             <p className="muted" style={{ margin: 0 }}>
-              {dueCount} repasos · {newCount} nuevas
+              {loading ? 'Cargando…' : `${dueCount} repasos · ${newCount} nuevas`}
             </p>
           </div>
         </div>
@@ -96,12 +97,17 @@ export function Home() {
       <div className="stack" style={{ marginTop: 16 }}>
         <Link className="btn primary block" to="/sesion/hoy" aria-disabled={queue.length === 0} onClick={(e) => queue.length === 0 && e.preventDefault()}>
           <Icon name="play" />
-          {queue.length ? `Empezar sesión (${queue.length})` : 'Nada pendiente por hoy'}
+          {loading ? 'Cargando…' : queue.length ? `Empezar sesión (${queue.length})` : 'Nada pendiente por hoy'}
         </Link>
-        <Link className="btn block" to="/sesion/debilidades" aria-disabled={!practicedAny} onClick={(e) => !practicedAny && e.preventDefault()}>
-          Repaso de debilidades
-        </Link>
-        {!queue.length && newLeftToday(settings, daily) === 0 && (
+        <div className="grid-2">
+          <Link className="btn" to="/sesion/debilidades" aria-disabled={!practicedAny} onClick={(e) => !practicedAny && e.preventDefault()}>
+            Debilidades
+          </Link>
+          <Link className="btn" to="/sesion/tonos" aria-disabled={!voice} onClick={(e) => !voice && e.preventDefault()} title={voice ? 'Pares mínimos y tonos' : 'Necesita voz china'}>
+            Tonos <span className="han" aria-hidden="true">ā á ǎ à</span>
+          </Link>
+        </div>
+        {!loading && !queue.length && newLeftToday(settings, daily) === 0 && (
           <p className="notice">Ya presentaste {settings.newPerDay} palabras nuevas hoy. Puedes subir el límite en Progreso → Ajustes.</p>
         )}
         {!voice && (
