@@ -4,6 +4,7 @@ import { say } from '../../app/audio';
 import { specFor, type ExerciseSpec } from '../../app/exercises';
 import { planSession, type SessionMode } from '../../app/plan';
 import { answer, repo, useSettings } from '../../app/progress';
+import { requestSync } from '../../sync/sync';
 import { viewOf, wordById } from '../../content';
 import type { ReviewOutcome } from '../../core/engine';
 import { levelFromXp } from '../../core/mastery';
@@ -297,6 +298,9 @@ function XpToast({ outcome }: { outcome: ReviewOutcome }) {
 }
 
 function Summary({ results }: { results: Result[] }) {
+  useEffect(() => {
+    void requestSync(repo); // subir la sesión recién terminada
+  }, []);
   const xp = results.reduce((a, r) => a + r.outcome.xpGained, 0);
   const correct = results.filter((r) => r.correct).length;
   // nivel final de cada habilidad practicada (último estado guardado)

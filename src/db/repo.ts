@@ -1,6 +1,6 @@
-// Repositorio de progreso. Es la única puerta a la persistencia: un adaptador de
-// sincronización en la nube implementaría esta misma interfaz más adelante
-// (el registro es append-only y cada estado lleva updatedAt, lo que permite fusionar).
+// Repositorio de progreso: la única puerta a la persistencia local.
+// La sincronización (src/sync) lee y reemplaza datos a través de él: el registro es
+// append-only y cada estado lleva updatedAt, lo que permite fusionar dispositivos.
 import type { ReviewLogEntry, ReviewOutcome, SkillState } from '../core/engine';
 import { reviveCard } from '../core/scheduler';
 import type { ItemId, Skill } from '../core/skills';
@@ -31,6 +31,9 @@ export interface ProgressRepo {
   saveSettings(patch: Partial<Settings>): Promise<Settings>;
   exportAll(contentVersion: string): Promise<Backup>;
   importAll(backup: unknown): Promise<{ states: number; logs: number }>;
+  allLogs(): Promise<ReviewLogEntry[]>;
+  /** Escribe el resultado de una fusión: estados y registros nuevos, estadísticas recalculadas. */
+  writeMerged(m: { states: SkillState[]; logs: ReviewLogEntry[]; daily: DailyStat[]; settings: Settings }): Promise<void>;
 }
 
 export function localDate(ts: number): string {
@@ -92,9 +95,23 @@ export class DexieProgressRepo implements ProgressRepo {
   }
 
   async saveSettings(patch: Partial<Settings>): Promise<Settings> {
-    const next = { ...(await this.getSettings()), ...patch };
+    const next = { ...(await this.getSettings()), ...patch, updatedAt: Date.now() };
     await this.db.kv.put({ key: 'settings', value: next });
     return next;
+  }
+
+  allLogs() {
+    return this.db.reviewLog.toArray();
+  }
+
+  async writeMerged(m: { states: SkillState[]; logs: ReviewLogEntry[]; daily: DailyStat[]; settings: Settings }) {
+    await this.db.transaction('rw', [this.db.skillStates, this.db.reviewLog, this.db.dailyStats, this.db.kv], async () => {
+      if (m.states.length) await this.db.skillStates.bulkPut(m.states);
+      if (m.logs.length) await this.db.reviewLog.bulkPut(m.logs);
+      await this.db.dailyStats.clear();
+      await this.db.dailyStats.bulkPut(m.daily);
+      await this.db.kv.put({ key: 'settings', value: m.settings });
+    });
   }
 
   async exportAll(contentVersion: string): Promise<Backup> {

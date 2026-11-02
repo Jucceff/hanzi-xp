@@ -8,6 +8,7 @@ import { streak, weekStart, xpInRange } from '../../core/stats';
 import { itemKind, itemKey } from '../../core/skills';
 import { localDate } from '../../db/repo';
 import { Empty, Icon, Seal } from '../../ui/components';
+import { useSyncStatus } from '../progress/SyncCard';
 
 export function Home() {
   const settings = useSettings();
@@ -43,8 +44,11 @@ export function Home() {
           </span>
           <span className="display">Hanzi XP</span>
         </Link>
-        <span className="tag" title="Niveles activos">
-          HSK {settings.levels.join(' · ')}
+        <span className="row" style={{ gap: 6 }}>
+          <SyncBadge />
+          <span className="tag" title="Niveles activos">
+            HSK {settings.levels.join(' · ')}
+          </span>
         </span>
       </header>
 
@@ -134,5 +138,16 @@ export function Home() {
         </div>
       )}
     </>
+  );
+}
+
+function SyncBadge() {
+  const st = useSyncStatus();
+  if (st.phase === 'off') return null;
+  const label = st.phase === 'syncing' ? 'Sincronizando…' : st.phase === 'error' ? 'Sin sincronizar' : 'Sincronizado';
+  return (
+    <Link to="/progreso" className={`tag${st.phase === 'error' ? ' weak' : ''}`} title={st.message ?? label} style={{ textDecoration: 'none' }}>
+      {st.phase === 'syncing' ? '⟳' : st.phase === 'error' ? '!' : '☁'} {label}
+    </Link>
   );
 }

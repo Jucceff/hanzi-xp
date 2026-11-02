@@ -14,11 +14,13 @@ async function answerCurrent(page: Page): Promise<boolean> {
   if (await reveal.isVisible()) {
     await reveal.click();
     await page.getByRole('button', { name: /^Bien/ }).click();
+    await page.locator('.grade').first().waitFor({ state: 'detached' });
     return true;
   }
   // en desarrollo la opción correcta lleva data-correct (gancho solo para pruebas)
   await page.locator('.option[data-correct]').click();
   await page.getByRole('button', { name: /Continuar/ }).click();
+  await expect(page.locator('.option[data-state]')).toHaveCount(0); // la tarjeta respondida ya no está
   return true;
 }
 

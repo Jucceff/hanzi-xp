@@ -31,11 +31,16 @@ npm run build        # build de producción + service worker
 - **Dominio efectivo** = XP × retención estimada (FSRS); baja si no repasas. El XP ganado no se pierde.
 - Niveles por habilidad: 0, 5, 15, 30, 50, 75, 105, 140, 180, 225, 275 XP (Nuevo → Visto → Aprendiendo → Familiar → Dominado).
 
+## Sincronización entre dispositivos
+
+Progreso → Sincronización: pega un token clásico de GitHub con solo el permiso `gist`. La app crea un **gist secreto** en tu cuenta (`hanzi-xp.estado.b64` + un archivo de registro por mes, JSON gzip+base64) y sincroniza al abrir, al terminar cada sesión, al salir y cada 10 minutos. Fusión: registro por unión (append-only), estados por el más reciente, estadísticas diarias recalculadas. El progreso local sigue funcionando sin conexión.
+
 ## Estructura
 
 ```
 src/core/      lógica pura y testeada: xp, mastery, scheduler (FSRS), engine, queue, stats, pinyin
 src/db/        Dexie (IndexedDB) + ProgressRepo + exportar/importar
+src/sync/      sincronización con gist: formato, fusión y cliente de GitHub
 src/content/   carga de los JSON e índices
 src/app/       servicios para la UI (audio, ejercicios, planificación)
 src/features/  pantallas: home, session, item, map, words, progress

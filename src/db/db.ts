@@ -25,6 +25,8 @@ export interface Settings {
   levels: number[];
   /** velocidad de la voz (Web Speech) */
   speechRate: number;
+  /** última modificación (para fusionar entre dispositivos) */
+  updatedAt?: number;
 }
 
 export const DEFAULT_SETTINGS: Settings = {

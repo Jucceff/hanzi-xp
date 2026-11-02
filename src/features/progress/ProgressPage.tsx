@@ -8,6 +8,7 @@ import { addDays, daysToReady, streak, weekStart, xpInRange } from '../../core/s
 import { charItem, itemKey, itemKind, wordItem, type ItemId } from '../../core/skills';
 import type { ThemePref } from '../../db/db';
 import { localDate, serializeBackup } from '../../db/repo';
+import { SyncCard } from './SyncCard';
 
 const STAGES: Stage[] = ['nuevo', 'visto', 'aprendiendo', 'familiar', 'dominado'];
 const DAY = 86_400_000;
@@ -53,6 +54,7 @@ export function ProgressPage() {
 
       <Calendar daily={daily} today={today} />
       <Rankings mastery={mastery} />
+      <SyncCard />
       <SettingsCard />
       <BackupCard />
 
@@ -288,7 +290,7 @@ function BackupCard() {
       <h2 className="section-title">Respaldo</h2>
       <div className="card stack">
         <p className="muted" style={{ margin: 0 }}>
-          Tu progreso se guarda solo en este dispositivo. Exporta un archivo JSON de vez en cuando.
+          Copia manual de todo tu progreso en un archivo JSON (útil aunque uses la sincronización).
         </p>
         <div className="grid-2">
           <button type="button" className="btn" onClick={exportNow}>
