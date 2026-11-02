@@ -1,0 +1,44 @@
+{
+  "fetchedAt": "2026-11-02T03:51:50+00:00",
+  "files": {
+    "official_glossaryPage.json": {
+      "url": "https://www.chinesetest.cn/api/hsk/outline/glossaryPage",
+      "sha256": "4b9f54e12125bb63a4bfe14d5f7bb779703ec6f06569770406bcbabca73d3007",
+      "records": 11231
+    },
+    "official_hanziPage.json": {
+      "url": "https://www.chinesetest.cn/api/hsk/outline/hanziPage",
+      "sha256": "fedb1506fa18324d179cce420e83ef41a943861bc7f57726b3c275557953681a",
+      "records": 4288
+    },
+    "official_languagePage.json": {
+      "url": "https://www.chinesetest.cn/api/hsk/outline/languagePage",
+      "sha256": "2f1b4d569ac0931edb3f1cbfd5ea00c19c47d0ad5d091eb674aa64eb07fe907d",
+      "records": 593
+    },
+    "cedict.txt": {
+      "url": "https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.txt.gz",
+      "sha256": "b4537f6bdd73fa33f94c07ceda3ce697da66bf32826167cce3b7ba42c0f3755e"
+    },
+    "makemeahanzi.txt": {
+      "url": "https://raw.githubusercontent.com/skishore/makemeahanzi/master/dictionary.txt",
+      "sha256": "744bb05d5b0742e9ee35c37791f94d56a173349b3367569e7ca11e510364d203"
+    },
+    "tatoeba_cmn.tsv": {
+      "url": "https://downloads.tatoeba.org/exports/per_language/cmn/cmn_sentences.tsv.bz2",
+      "sha256": "7894ff352baf250724974a1fafc710e8bb65c5014d2cecd5185f0b72576e5614"
+    },
+    "tatoeba_spa.tsv": {
+      "url": "https://downloads.tatoeba.org/exports/per_language/spa/spa_sentences.tsv.bz2",
+      "sha256": "34a6f2472ff2d428f4194bf2c23a27d9898b0f22ea246f9b93ce70b0906160a5"
+    },
+    "tatoeba_cmn_spa_links.tsv": {
+      "url": "https://downloads.tatoeba.org/exports/per_language/cmn/cmn-spa_links.tsv.bz2",
+      "sha256": "d5718e01315c3327d38718c2e3c9f9eb412085a8e6ae683a8ba9044ddc7dc0fe"
+    },
+    "drkameleon_complete.json": {
+      "url": "https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/complete.min.json",
+      "sha256": "52d8e64ba65a6db4a38ea34302c6de5df53cdb5145254b25edcbf93b80676434"
+    }
+  }
+}
