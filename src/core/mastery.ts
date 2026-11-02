@@ -1,8 +1,11 @@
 // Niveles 0–10 y dominio efectivo (XP × retención estimada).
 import { SKILL_WEIGHT, type ItemKind, type Skill, skillsFor } from './skills';
 
-/** XP acumulado necesario para cada nivel (índice = nivel). */
-export const LEVEL_THRESHOLDS = [0, 10, 30, 60, 100, 160, 240, 340, 470, 630, 830] as const;
+/**
+ * XP acumulado necesario para cada nivel (índice = nivel), por habilidad.
+ * Calibrado para que ~12–15 repasos bien espaciados lleven una habilidad a "Dominado".
+ */
+export const LEVEL_THRESHOLDS = [0, 5, 15, 30, 50, 75, 105, 140, 180, 225, 275] as const;
 export const MAX_LEVEL = LEVEL_THRESHOLDS.length - 1;
 
 export type Stage = 'nuevo' | 'visto' | 'aprendiendo' | 'familiar' | 'dominado';
@@ -43,12 +46,12 @@ const DAY = 86_400_000;
 /**
  * Retención estimada para habilidades sin tarjeta FSRS propia (p. ej. un carácter que
  * solo ha recibido XP por sus palabras). Curva de potencia de FSRS con una estabilidad
- * que crece con el XP: S = 1 + 0.15·XP días (máx. 365).
+ * que crece con el XP: S = 1 + 0.6·XP días (máx. 365).
  */
 export function exposureRetention(xp: number, lastSeen: number | null, now: number): number {
   if (!lastSeen || xp <= 0) return xp > 0 ? 1 : 0;
   const days = Math.max(0, (now - lastSeen) / DAY);
-  const stability = Math.min(365, 1 + 0.15 * xp);
+  const stability = Math.min(365, 1 + 0.6 * xp);
   return Math.pow(1 + days / (9 * stability), -1);
 }
 

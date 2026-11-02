@@ -1,14 +1,15 @@
 // Envoltorio fino sobre ts-fsrs (FSRS-7). Una tarjeta por (ítem, habilidad).
-import { DefaultScheduler, type DefaultSchedulerCard } from 'ts-fsrs';
+import { DefaultScheduler } from 'ts-fsrs';
 import type { Grade } from './xp';
 
-export type FsrsCard = DefaultSchedulerCard;
-export type Scheduler = Awaited<ReturnType<typeof DefaultScheduler>>;
+export type Scheduler = Awaited<ReturnType<typeof DefaultScheduler<'FSRS-7'>>>;
+/** Tarjeta FSRS-7 tal como la acepta `review()` (incluye stabilityFast). */
+export type FsrsCard = Parameters<Scheduler['review']>[0]['card'];
 
 let instance: Promise<Scheduler> | null = null;
 
 export function getScheduler(): Promise<Scheduler> {
-  instance ??= DefaultScheduler({ desiredRetention: 0.9, enableFuzz: true, maximumInterval: 3650 });
+  instance ??= DefaultScheduler({ version: 'FSRS-7', desiredRetention: 0.9, enableFuzz: true, maximumInterval: 3650 });
   return instance;
 }
 

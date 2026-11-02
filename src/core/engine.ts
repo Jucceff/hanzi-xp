@@ -76,8 +76,10 @@ export function blankState(itemId: ItemId, skill: Skill, now: number): SkillStat
 export function computeReview(input: ReviewInput, ctx: ReviewContext): ReviewOutcome {
   const now = ctx.now.getTime();
   const correct = input.grade > 1;
-  const delta = xpDelta(input.exercise, input.grade);
   const base = ctx.get(input.itemId, input.skill) ?? blankState(input.itemId, input.skill, now);
+  const lastReview = base.card?.lastReviewAt?.getTime();
+  const elapsedDays = lastReview ? (now - lastReview) / 86_400_000 : 0;
+  const delta = xpDelta(input.exercise, input.grade, elapsedDays);
   const card = reviewCard(ctx.scheduler, base.card, input.grade, ctx.now);
   const main: SkillState = {
     ...base,

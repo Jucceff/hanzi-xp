@@ -32,6 +32,27 @@ export function toNumbered(syllable: string): string {
   return stripTones(syllable).toLowerCase() + toneOf(syllable);
 }
 
+const TONED: Record<string, string> = {
+  a: 'āáǎà', e: 'ēéěè', i: 'īíǐì', o: 'ōóǒò', u: 'ūúǔù', ü: 'ǖǘǚǜ',
+};
+
+/** Pone el tono a una sílaba sin tono (regla estándar: a/e, luego "ou", luego la última vocal). */
+export function markTone(base: string, tone: Tone): string {
+  const s = stripTones(base);
+  if (tone === 5) return s;
+  let idx = s.search(/[ae]/);
+  if (idx < 0) idx = s.indexOf('ou');
+  if (idx < 0) {
+    for (let i = s.length - 1; i >= 0; i--)
+      if ('iouü'.includes(s[i])) {
+        idx = i;
+        break;
+      }
+  }
+  if (idx < 0) return s;
+  return s.slice(0, idx) + TONED[s[idx]][tone - 1] + s.slice(idx + 1);
+}
+
 /** Normaliza para comparar: minúsculas, sin tonos, sin separadores, ü→v. */
 export function plainKey(s: string): string {
   return stripTones(s).toLowerCase().replace(/[\s'’\-·]/g, '').replace(/ü/g, 'v');

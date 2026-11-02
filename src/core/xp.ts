@@ -33,9 +33,19 @@ export const WEAK_RECOVERY_STREAK = 2;
 export const CHAR_SHARE = 0.4;
 export const CHAR_FAIL_PENALTY = 1;
 
-export function xpDelta(exercise: Exercise, grade: Grade): number {
+/**
+ * Bonus por repaso espaciado: acertar algo que no veías desde hace días vale más
+ * que acertarlo dos veces seguidas (premia la memoria a largo plazo, no el atracón).
+ * 0 días ×1 · 1 día ×1.5 · 3 días ×2 · 7 días ×2.5 · ≥15 días ×3
+ */
+export function spacingMultiplier(elapsedDays: number): number {
+  if (elapsedDays <= 0) return 1;
+  return 1 + Math.min(2, Math.log2(1 + elapsedDays) / 2);
+}
+
+export function xpDelta(exercise: Exercise, grade: Grade, elapsedDays = 0): number {
   if (grade === 1) return -FAIL_PENALTY;
-  return Math.round(BASE_XP[exercise] * GRADE_MULTIPLIER[grade]);
+  return Math.round(BASE_XP[exercise] * GRADE_MULTIPLIER[grade] * spacingMultiplier(elapsedDays));
 }
 
 export interface XpState {

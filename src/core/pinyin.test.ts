@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { plainKey, splitPinyin, stripTones, toNumbered, toneOf } from './pinyin';
+import { markTone, plainKey, splitPinyin, stripTones, toNumbered, toneOf } from './pinyin';
 
 describe('pinyin', () => {
   it('detecta tonos y neutro', () => {
@@ -21,6 +21,14 @@ describe('pinyin', () => {
   });
   it('devuelve null si no alinea', () => {
     expect(splitPinyin('hǎo', [['ni']])).toBeNull();
+  });
+  it('pone tonos según la regla estándar', () => {
+    expect(markTone('hao', 3)).toBe('hǎo');
+    expect(markTone('gou', 3)).toBe('gǒu');
+    expect(markTone('gui', 4)).toBe('guì');
+    expect(markTone('liu', 2)).toBe('liú');
+    expect(markTone('nü', 3)).toBe('nǚ');
+    expect(markTone('xiè', 5)).toBe('xie');
   });
   it('normaliza para comparar', () => {
     expect(plainKey('Nǚ’ér')).toBe('nver');

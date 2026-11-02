@@ -64,6 +64,15 @@ describe('computeReview', () => {
     expect(out.states[1].weak).toBe(false); // el carácter no se marca débil
   });
 
+  it('un acierto días después vale más XP', () => {
+    const { ctx, store } = makeCtx(new Date('2026-11-01T10:00:00Z'));
+    save(store, computeReview({ itemId: 'w:书', skill: 'recognition', exercise: 'flashcard', grade: 3, sessionId: 's' }, ctx).states);
+    const later = { ...ctx, now: new Date('2026-11-04T10:00:00Z') };
+    const out = computeReview({ itemId: 'w:书', skill: 'recognition', exercise: 'flashcard', grade: 3, sessionId: 's' }, later);
+    expect(out.delta).toBe(12); // 6 × 2 (3 días)
+    expect(out.states[0].xp).toBe(18);
+  });
+
   it('acertar aleja el siguiente repaso', () => {
     const now = new Date('2026-11-01T10:00:00Z');
     const { ctx } = makeCtx(now);

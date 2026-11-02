@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyDirect, applyPropagated, emptyXpState, propagatedDelta, xpDelta } from './xp';
+import { applyDirect, applyPropagated, emptyXpState, propagatedDelta, spacingMultiplier, xpDelta } from './xp';
 
 describe('xpDelta', () => {
   it('escala por ejercicio y valoración', () => {
@@ -8,8 +8,16 @@ describe('xpDelta', () => {
     expect(xpDelta('flashcard', 2)).toBe(4);
     expect(xpDelta('writing', 3)).toBe(12);
   });
-  it('un fallo resta 2', () => {
+  it('un fallo resta 2 (sin importar el tiempo transcurrido)', () => {
     expect(xpDelta('production', 1)).toBe(-2);
+    expect(xpDelta('production', 1, 30)).toBe(-2);
+  });
+  it('acertar tras más días da más XP (repaso espaciado)', () => {
+    expect(spacingMultiplier(0)).toBe(1);
+    expect(spacingMultiplier(1)).toBeCloseTo(1.5);
+    expect(spacingMultiplier(3)).toBeCloseTo(2);
+    expect(spacingMultiplier(365)).toBe(3);
+    expect(xpDelta('flashcard', 3, 3)).toBe(12);
   });
 });
 

@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-02T03:51:50+00:00",
+  "fetchedAt": "2026-11-02T04:16:26+00:00",
   "files": {
     "official_glossaryPage.json": {
       "url": "https://www.chinesetest.cn/api/hsk/outline/glossaryPage",
@@ -39,6 +39,14 @@
     "drkameleon_complete.json": {
       "url": "https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/complete.min.json",
       "sha256": "52d8e64ba65a6db4a38ea34302c6de5df53cdb5145254b25edcbf93b80676434"
+    },
+    "LXGWWenKai-Regular.ttf": {
+      "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.530/LXGWWenKai-Regular.ttf",
+      "sha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b"
+    },
+    "LXGWWenKai-OFL.txt": {
+      "url": "https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/OFL.txt",
+      "sha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0"
     }
   }
 }

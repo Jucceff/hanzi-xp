@@ -336,7 +336,14 @@ const meta: ContentMeta = {
 };
 
 mkdirSync(OUT, { recursive: true });
-const write = (name: string, data: unknown) => writeFileSync(join(OUT, name), JSON.stringify(data) + '\n');
+// Un registro por línea: diffs legibles en git.
+const write = (name: string, data: unknown) =>
+  writeFileSync(
+    join(OUT, name),
+    Array.isArray(data)
+      ? `[\n${data.map((d) => JSON.stringify(d)).join(',\n')}\n]\n`
+      : JSON.stringify(data, null, 2) + '\n',
+  );
 write('words.json', words);
 write('chars.json', chars);
 write('grammar.json', grammar);
@@ -348,6 +355,32 @@ for (const c of chars) {
   if (existsSync(f)) copyFileSync(f, join(STROKES_OUT, `${c.char}.json`));
 }
 copyFileSync(join(strokesDir, 'ARPHICPL.TXT'), join(STROKES_OUT, 'ARPHICPL.TXT'));
+
+// ───────────────────────── tipografía (subconjunto) ─────────────────────────
+// LXGW WenKai reducida a los caracteres que usa el contenido + pinyin + puntuación.
+const glyphs = new Set<string>();
+const addText = (t: string | undefined) => {
+  for (const ch of t ?? '') glyphs.add(ch);
+};
+for (const w of words) {
+  addText(w.simp);
+  addText(w.trad);
+  addText(w.pinyin);
+  for (const e of w.examples) addText(e.zh + e.pinyin);
+}
+for (const c of chars) addText(c.char + c.trad + c.pinyin.join('') + c.components.join('') + c.radical);
+for (const g of grammar) addText(g.content + g.officialExamples.join(''));
+addText(' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüńňǹ’\'-·…');
+addText('，。？！、：；“”‘’（）《》—～·');
+const fontSrc = join(RAW, 'LXGWWenKai-Regular.ttf');
+if (existsSync(fontSrc)) {
+  const { default: subsetFont } = await import('subset-font');
+  const woff2 = await subsetFont(readFileSync(fontSrc), [...glyphs].join(''), { targetFormat: 'woff2' });
+  mkdirSync(join(ROOT, 'public/fonts'), { recursive: true });
+  writeFileSync(join(ROOT, 'public/fonts/wenkai-hsk.woff2'), woff2);
+  copyFileSync(join(RAW, 'LXGWWenKai-OFL.txt'), join(ROOT, 'public/fonts/LXGWWenKai-OFL.txt'));
+  console.log(`Tipografía: ${glyphs.size} glifos → ${(woff2.length / 1024).toFixed(0)} KB`);
+} else problems.push('No está data/raw/LXGWWenKai-Regular.ttf: no se regeneró la tipografía');
 
 const report = [
   '# Reporte de huecos de datos',

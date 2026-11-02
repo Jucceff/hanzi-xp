@@ -7,6 +7,7 @@ Uso:  python -I scripts/data/fetch_sources.py [--force]
 - Make Me a Hanzi dictionary.txt (Arphic Public License)
 - Tatoeba: frases cmn, spa y enlaces cmn-spa (CC BY 2.0 FR)
 - drkameleon/complete-hsk-vocabulary (MIT): solo se usa su campo de frecuencia
+- LXGW WenKai (SIL OFL 1.1): tipografía para los hanzi
 
 Escribe data/sources.lock.json (versionado) con URL, fecha y SHA-256 de cada archivo.
 """
@@ -16,7 +17,9 @@ import gzip
 import hashlib
 import json
 import pathlib
+import subprocess
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -35,14 +38,24 @@ FILES = {
     "tatoeba_spa.tsv": ("https://downloads.tatoeba.org/exports/per_language/spa/spa_sentences.tsv.bz2", "bz2"),
     "tatoeba_cmn_spa_links.tsv": ("https://downloads.tatoeba.org/exports/per_language/cmn/cmn-spa_links.tsv.bz2", "bz2"),
     "drkameleon_complete.json": ("https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/complete.min.json", None),
+    # Tipografía china (SIL OFL 1.1); se subconjunta a los caracteres usados
+    "LXGWWenKai-Regular.ttf": ("https://github.com/lxgw/LxgwWenKai/releases/download/v1.530/LXGWWenKai-Regular.ttf", None),
+    "LXGWWenKai-OFL.txt": ("https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/OFL.txt", None),
 }
 
 
 def http(url: str, method: str = "GET") -> bytes:
     req = urllib.request.Request(url, data=b"" if method == "POST" else None, method=method, headers={
         "User-Agent": UA, "Accept": "*/*", "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return r.read()
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            return r.read()
+    except urllib.error.URLError as e:
+        # Algunos CDN (p. ej. los assets de GitHub) fallan con el almacén de certificados
+        # de Python en Windows; curl usa el del sistema. Nunca se desactiva la verificación.
+        if method != "GET" or "CERTIFICATE" not in str(e):
+            raise
+        return subprocess.run(["curl", "-sSfL", "--max-time", "600", url], check=True, capture_output=True).stdout
 
 
 def fetch_official(endpoint: str) -> list:
