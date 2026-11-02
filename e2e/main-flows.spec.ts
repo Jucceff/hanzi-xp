@@ -145,3 +145,23 @@ test('escritura: escribir un carácter da XP de escritura', async ({ page }) => 
   await page.goto(`/#/ficha/c/${encodeURIComponent(ch)}`);
   await expect(page.locator('.skill-row', { hasText: 'Escritura' })).toContainText('12/12 XP');
 });
+
+test('lectura graduada: consultar palabras, terminar y responder', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Lecturas/ }).click();
+  await page.getByRole('link', { name: /Mi familia/ }).click();
+  await expect(page.getByRole('heading', { name: '我的家' })).toBeVisible();
+  await page.locator('.rt', { hasText: '医生' }).first().click();
+  await expect(page.getByRole('dialog')).toContainText('médico');
+  await page.getByRole('button', { name: 'Cerrar' }).click();
+  await page.getByRole('button', { name: 'Traducción' }).first().click();
+  await expect(page.getByText(/En mi familia somos cuatro/)).toBeVisible();
+  await page.getByRole('button', { name: 'Terminé de leer' }).click();
+  for (const answer of ['Cuatro', 'En una escuela primaria', 'Un gato']) await page.getByRole('button', { name: answer, exact: true }).click();
+  await page.getByRole('button', { name: 'Ver resultado' }).click();
+  await expect(page.locator('.stats-row')).toContainText('3/3');
+  await expect(page.locator('.stats-row')).toContainText('XP de lectura');
+  await expect(page.getByText('Para repasar pronto')).toBeVisible();
+  await page.getByRole('link', { name: 'Más lecturas' }).click();
+  await expect(page.locator('.item-row', { hasText: 'Mi familia' })).toContainText('✓ 1×');
+});

@@ -108,6 +108,20 @@ export interface Phrase {
   pinyin: string;
 }
 
+/** Lectura graduada (data/authored/readings.json). */
+export interface Reading {
+  id: string;
+  level: HskLevel;
+  title: string;
+  titleZh: string;
+  paragraphs: { zh: string; es: string; tokens: SentenceToken[] }[];
+  questions: { q: string; options: string[]; answer: number }[];
+  /** ids de las palabras HSK que aparecen (sin repetir) */
+  words: string[];
+  /** nº de caracteres chinos */
+  length: number;
+}
+
 export interface ContentMeta {
   version: string;
   generatedAt: string;

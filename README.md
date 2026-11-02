@@ -29,6 +29,8 @@ Frases: **ordena la frase** (fichas con hanzi y pinyin a partir de la traducció
 
 Flashcards (ambas direcciones), opción múltiple (hanzi→significado, significado→hanzi, hanzi→pinyin), escucha (oír → elegir el hanzi, con pares mínimos y sin homófonos) y tonos (oír → elegir los tonos sobre el pinyin sin tonos). La escucha se desbloquea para las palabras vistas un día anterior y requiere una voz zh-CN en el dispositivo. **Escritura** (Hanzi Writer en modo quiz): la primera vez, guiada (animación + contorno); después, de memoria, con «Pista» (cuenta como 2 errores), «Contorno» (1) y «No lo sé». La valoración depende de los errores en proporción a los trazos. Los caracteres nuevos salen de las palabras que ya practicas, priorizando la lista oficial de escritura (书写字). También se practica desde la ficha de cada carácter.
 
+**Lecturas graduadas** (`data/authored/readings.json`): 18 textos (6 por nivel) con traducción por párrafo y preguntas de comprensión; el build exige que cada texto use solo vocabulario de su nivel o inferior. Al tocar una palabra se ve su pinyin, significado y nivel; las palabras consultadas se adelantan para repasarlas y los caracteres leídos sin consultar reciben XP de reconocimiento. Se recomiendan los textos con ≤10 % de palabras que aún no has practicado. El historial de lectura se deduce del registro, así que se sincroniza.
+
 Modos: sesión diaria (incluye repasos de escritura), frases útiles, escritura, debilidades y entrenamiento de tonos.
 
 ## Modelo de progreso

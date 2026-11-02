@@ -7,6 +7,8 @@ import type { ItemId, Skill } from '../core/skills';
 import { DEFAULT_SETTINGS, HanziDB, type DailyStat, type Settings } from './db';
 
 export const BACKUP_SCHEMA = 1;
+/** Prefijo de sessionId de las lecturas: `lectura:<id>:<uuid>` */
+export const READING_SESSION = 'lectura:';
 
 export interface Backup {
   app: 'hanzi-xp';
@@ -32,6 +34,10 @@ export interface ProgressRepo {
   exportAll(contentVersion: string): Promise<Backup>;
   importAll(backup: unknown): Promise<{ states: number; logs: number }>;
   allLogs(): Promise<ReviewLogEntry[]>;
+  /** Adelanta el próximo repaso (p. ej. palabras consultadas al leer), sin dar ni quitar XP. */
+  bringForward(itemIds: ItemId[], skill: Skill, now?: number): Promise<number>;
+  /** Lecturas terminadas: id → veces y última fecha (se deduce del registro, así se sincroniza). */
+  readingHistory(): Promise<Map<string, { count: number; last: number }>>;
   /** Escribe el resultado de una fusión: estados y registros nuevos, estadísticas recalculadas. */
   writeMerged(m: { states: SkillState[]; logs: ReviewLogEntry[]; daily: DailyStat[]; settings: Settings }): Promise<void>;
 }
@@ -102,6 +108,34 @@ export class DexieProgressRepo implements ProgressRepo {
 
   allLogs() {
     return this.db.reviewLog.toArray();
+  }
+
+  async bringForward(itemIds: ItemId[], skill: Skill, now = Date.now()) {
+    const states = await this.db.skillStates
+      .where('itemId')
+      .anyOf(itemIds)
+      .filter((s) => s.skill === skill && Boolean(s.card))
+      .toArray();
+    const next = states.map((s) => ({
+      ...s,
+      due: Math.min(s.due ?? now, now),
+      card: { ...s.card!, dueAt: new Date(Math.min(s.card!.dueAt.getTime(), now)) },
+      updatedAt: now,
+    }));
+    await this.db.skillStates.bulkPut(next);
+    return next.length;
+  }
+
+  async readingHistory() {
+    const logs = await this.db.reviewLog.where('sessionId').startsWith(READING_SESSION).toArray();
+    const sessions = new Map<string, { id: string; ts: number }>();
+    for (const l of logs) sessions.set(l.sessionId, { id: l.sessionId.split(':')[1], ts: l.ts });
+    const out = new Map<string, { count: number; last: number }>();
+    for (const { id, ts } of sessions.values()) {
+      const cur = out.get(id) ?? { count: 0, last: 0 };
+      out.set(id, { count: cur.count + 1, last: Math.max(cur.last, ts) });
+    }
+    return out;
   }
 
   async writeMerged(m: { states: SkillState[]; logs: ReviewLogEntry[]; daily: DailyStat[]; settings: Settings }) {

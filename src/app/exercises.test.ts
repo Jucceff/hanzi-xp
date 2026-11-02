@@ -123,3 +123,25 @@ describe('sesión de escritura', () => {
     expect(specFor(q[0], { audio: false })).toEqual({ type: 'write', guided: false, xpKind: 'writing' });
   });
 });
+
+describe('lecturas graduadas', () => {
+  it('cada lectura usa solo vocabulario de su nivel o inferior', async () => {
+    const { readings, wordById } = await import('../content');
+    expect(readings.length).toBeGreaterThanOrEqual(18);
+    for (const r of readings) {
+      for (const t of r.paragraphs.flatMap((p) => p.tokens)) {
+        if (!t.p) continue;
+        expect(t.w || t.g, `${r.id}: ${t.t}`).toBeTruthy();
+        if (t.w) expect(wordById.get(t.w)!.level, `${r.id}: ${t.t}`).toBeLessThanOrEqual(r.level);
+      }
+      for (const q of r.questions) expect(q.answer).toBeLessThan(q.options.length);
+    }
+  });
+  it('porcentaje de palabras nuevas según lo practicado', async () => {
+    const { readingById } = await import('../content');
+    const { unknownShare } = await import('../features/reading/ReadingsPage');
+    const r = readingById.get('h1-mi-familia')!;
+    expect(unknownShare(r, new Set()).share).toBe(1);
+    expect(unknownShare(r, new Set(r.words.map((w) => `w:${w}`))).share).toBe(0);
+  });
+});

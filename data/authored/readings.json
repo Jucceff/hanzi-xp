@@ -1,0 +1,857 @@
+[
+ {
+  "id": "h1-mi-familia",
+  "level": 1,
+  "title": "Mi familia",
+  "titleZh": "我的家",
+  "paragraphs": [
+   [
+    "我叫王明，我是中国人。我家有四口人：爸爸、妈妈、姐姐和我。",
+    "Me llamo Wang Ming y soy chino. En mi familia somos cuatro: papá, mamá, mi hermana mayor y yo."
+   ],
+   [
+    "我爸爸是医生，他在医院工作。我妈妈是老师，她在一个小学工作。",
+    "Mi padre es médico, trabaja en un hospital. Mi madre es profesora, trabaja en una escuela primaria."
+   ],
+   [
+    "我姐姐今年二十岁，她是大学生。我是中学生。",
+    "Mi hermana mayor tiene veinte años este año, es universitaria. Yo soy alumno de secundaria."
+   ],
+   [
+    "我们家还有一只猫，它叫小白。我很喜欢我的家。",
+    "En casa también tenemos un gato que se llama Xiaobai. Me gusta mucho mi familia."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Cuántas personas hay en la familia?",
+    "options": [
+     "Tres",
+     "Cuatro",
+     "Cinco"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Dónde trabaja la madre?",
+    "options": [
+     "En un hospital",
+     "En una escuela primaria",
+     "En una tienda"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué mascota tienen?",
+    "options": [
+     "Un perro",
+     "Un gato",
+     "Ninguna"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h1-mi-dia",
+  "level": 1,
+  "title": "Mi día",
+  "titleZh": "我的一天",
+  "paragraphs": [
+   [
+    "早上我七点起床。我喝牛奶，吃一些面包。",
+    "Por la mañana me levanto a las siete. Bebo leche y como un poco de pan."
+   ],
+   [
+    "八点我坐车去学校。上午有四个小时的课，我很喜欢汉语课。",
+    "A las ocho voy a la escuela en autobús. Por la mañana hay cuatro horas de clase; me gusta mucho la clase de chino."
+   ],
+   [
+    "中午我和同学在学校吃饭。下午我们在外边玩。",
+    "Al mediodía como con mis compañeros en la escuela. Por la tarde jugamos fuera."
+   ],
+   [
+    "晚上我在家学习，写汉字。十点我睡觉。",
+    "Por la noche estudio en casa y escribo caracteres. A las diez me voy a dormir."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿A qué hora se levanta?",
+    "options": [
+     "A las seis",
+     "A las siete",
+     "A las ocho"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué clase le gusta mucho?",
+    "options": [
+     "Matemáticas",
+     "Chino",
+     "Música"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué hace por la noche?",
+    "options": [
+     "Ve la tele",
+     "Estudia y escribe caracteres",
+     "Sale con amigos"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h1-restaurante",
+  "level": 1,
+  "title": "En el restaurante",
+  "titleZh": "在饭店",
+  "paragraphs": [
+   [
+    "今天中午，我和朋友去饭店吃饭。饭店很大，人也很多。",
+    "Hoy al mediodía fui con un amigo a comer a un restaurante. El restaurante es grande y hay mucha gente."
+   ],
+   [
+    "“你想吃什么？”“我想吃饺子，你呢？”“我要米饭和一个菜。”",
+    "—¿Qué quieres comer? —Quiero jiaozi, ¿y tú? —Yo quiero arroz y un plato."
+   ],
+   [
+    "我们还喝了茶。饭店的菜很好吃，也不贵。",
+    "También tomamos té. La comida del restaurante está muy rica y no es cara."
+   ],
+   [
+    "我们的饭是八十块钱。我说：“今天我来！”朋友说：“谢谢你！”",
+    "Nuestra comida costó ochenta yuanes. Dije: «¡Hoy pago yo!». Mi amigo dijo: «¡Gracias!»."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Qué quiere comer el narrador?",
+    "options": [
+     "Jiaozi",
+     "Fideos",
+     "Baozi"
+    ],
+    "answer": 0
+   },
+   {
+    "q": "¿Cuánto costó en total?",
+    "options": [
+     "Dieciocho yuanes",
+     "Ochenta yuanes",
+     "Ochocientos yuanes"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Quién paga?",
+    "options": [
+     "El amigo",
+     "El narrador",
+     "Cada uno lo suyo"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h1-compras",
+  "level": 1,
+  "title": "De compras",
+  "titleZh": "买东西",
+  "paragraphs": [
+   [
+    "星期六上午，妈妈和我去商店买东西。",
+    "El sábado por la mañana mamá y yo fuimos a la tienda a comprar cosas."
+   ],
+   [
+    "我想买一件新衣服。我问：“这件衣服多少钱？”",
+    "Quiero comprar una prenda nueva. Pregunté: «¿Cuánto cuesta esta prenda?»."
+   ],
+   [
+    "“三百块。”“太贵了！有没有便宜一点儿的？”",
+    "«Trescientos yuanes.» «¡Es demasiado caro! ¿Hay algo un poco más barato?»"
+   ],
+   [
+    "那件衣服一百块，也很漂亮。我买了那件。妈妈还买了一些水果。",
+    "Aquella prenda cuesta cien yuanes y también es muy bonita. Compré esa. Mamá además compró algo de fruta."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Cuánto costaba la primera prenda?",
+    "options": [
+     "Cien yuanes",
+     "Trescientos yuanes",
+     "Treinta yuanes"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué compró la madre?",
+    "options": [
+     "Ropa",
+     "Fruta",
+     "Un libro"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h1-mi-amigo",
+  "level": 1,
+  "title": "Mi amigo",
+  "titleZh": "我的朋友",
+  "paragraphs": [
+   [
+    "我有一个好朋友，他叫李大，是我的同学。",
+    "Tengo un buen amigo que se llama Li Da; es mi compañero de clase."
+   ],
+   [
+    "李大很喜欢说话。他会说一点儿中文，也会写一些汉字。",
+    "A Li Da le gusta mucho hablar. Sabe hablar un poco de chino y también escribir algunos caracteres."
+   ],
+   [
+    "他家在学校前边。我们是很好的朋友。",
+    "Su casa está delante de la escuela. Somos muy buenos amigos."
+   ],
+   [
+    "星期天我们在他家看电影。他妈妈做的饭非常好吃。",
+    "El domingo vemos películas en su casa. La comida que hace su madre está riquísima."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Quién es Li Da?",
+    "options": [
+     "Su hermano",
+     "Su compañero de clase",
+     "Su profesor"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Dónde está la casa de Li Da?",
+    "options": [
+     "Delante de la escuela",
+     "Lejos de la escuela",
+     "Detrás del hospital"
+    ],
+    "answer": 0
+   }
+  ]
+ },
+ {
+  "id": "h1-domingo",
+  "level": 1,
+  "title": "El domingo",
+  "titleZh": "星期天",
+  "paragraphs": [
+   [
+    "今天是星期天，天气很好，不冷也不热。",
+    "Hoy es domingo y hace muy buen tiempo: ni frío ni calor."
+   ],
+   [
+    "上午我在家休息，看书。",
+    "Por la mañana descansé en casa y leí."
+   ],
+   [
+    "下午我给朋友打电话：“你现在忙吗？我们去喝茶吧。”",
+    "Por la tarde llamé a un amigo: «¿Estás ocupado ahora? Vamos a tomar un té»."
+   ],
+   [
+    "我们在一个小店喝茶、说话，非常高兴。明天是星期一，我们都要上班。",
+    "Tomamos té y charlamos en una tienda pequeña, muy contentos. Mañana es lunes y los dos tenemos que trabajar."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Qué tiempo hace?",
+    "options": [
+     "Hace frío",
+     "Hace calor",
+     "Ni frío ni calor"
+    ],
+    "answer": 2
+   },
+   {
+    "q": "¿Qué hacen por la tarde?",
+    "options": [
+     "Van al cine",
+     "Toman té y charlan",
+     "Estudian"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h2-aficiones",
+  "level": 2,
+  "title": "Mis aficiones",
+  "titleZh": "我的爱好",
+  "paragraphs": [
+   [
+    "我的爱好很多。我喜欢运动，也喜欢画画。",
+    "Tengo muchas aficiones. Me gusta el deporte y también dibujar."
+   ],
+   [
+    "早上，我经常去学校旁边跑步。跑步对身体很好。",
+    "Por las mañanas suelo ir a correr junto a la escuela. Correr es muy bueno para la salud."
+   ],
+   [
+    "星期六和星期天，我经常和朋友一起踢足球。虽然有时很累，但是很快乐。",
+    "Los sábados y domingos suelo jugar al fútbol con amigos. Aunque a veces acabo cansado, es muy divertido."
+   ],
+   [
+    "我还喜欢游泳。我从小就会游泳，天气热的时候，我每个星期都去游两次。",
+    "También me gusta nadar. Sé nadar desde pequeño; cuando hace calor voy a nadar dos veces por semana."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Dónde corre por las mañanas?",
+    "options": [
+     "En el parque",
+     "Junto a la escuela",
+     "En casa"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Cuántas veces nada cuando hace calor?",
+    "options": [
+     "Una vez al mes",
+     "Dos veces por semana",
+     "Todos los días"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h2-aeropuerto",
+  "level": 2,
+  "title": "Rumbo al aeropuerto",
+  "titleZh": "去机场",
+  "paragraphs": [
+   [
+    "明天我要去中国旅游，所以今天晚上要准备一下。",
+    "Mañana me voy de viaje a China, así que esta noche tengo que prepararlo todo."
+   ],
+   [
+    "我的机票是早上九点的。从我家到机场，坐地铁要一个小时，打车四十分钟就到了。",
+    "Mi vuelo es a las nueve de la mañana. De mi casa al aeropuerto en metro se tarda una hora; en taxi se llega en cuarenta minutos."
+   ],
+   [
+    "我想早一点儿出门，所以我准备六点起床，坐地铁去。",
+    "Quiero salir de casa un poco antes, así que pienso levantarme a las seis e ir en metro."
+   ],
+   [
+    "妈妈告诉我：“别忘了手机和钱！到了给我打电话。”",
+    "Mi madre me dijo: «¡No olvides el móvil y el dinero! Llámame cuando llegues»."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Cuánto se tarda en metro al aeropuerto?",
+    "options": [
+     "Cuarenta minutos",
+     "Una hora",
+     "Dos horas"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Cómo piensa ir?",
+    "options": [
+     "En taxi",
+     "En metro",
+     "En autobús"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h2-cumpleanos",
+  "level": 2,
+  "title": "El cumpleaños de mi abuela",
+  "titleZh": "奶奶的生日",
+  "paragraphs": [
+   [
+    "上个星期六是我奶奶的生日。她今年八十岁了，身体还很好。",
+    "El sábado pasado fue el cumpleaños de mi abuela. Ha cumplido ochenta años y todavía está muy bien de salud."
+   ],
+   [
+    "那天，家里来了很多人。爷爷、爸爸和妈妈在做饭，我帮他们准备桌子和椅子。",
+    "Ese día vino mucha gente a casa. El abuelo, papá y mamá estaban cocinando, y yo les ayudé a preparar las mesas y las sillas."
+   ],
+   [
+    "我送给奶奶一个红色的包，她笑着说：“谢谢你，这个颜色真好看！”",
+    "Le regalé a la abuela un bolso rojo; ella dijo sonriendo: «¡Gracias, este color es precioso!»."
+   ],
+   [
+    "晚上我们一起唱歌、吃饭，大家都很快乐。",
+    "Por la noche cantamos y cenamos juntos; todos estábamos muy contentos."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Cuántos años cumple la abuela?",
+    "options": [
+     "Sesenta",
+     "Setenta",
+     "Ochenta"
+    ],
+    "answer": 2
+   },
+   {
+    "q": "¿Qué le regaló el narrador?",
+    "options": [
+     "Un reloj",
+     "Un bolso rojo",
+     "Un libro"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h2-medico",
+  "level": 2,
+  "title": "En el médico",
+  "titleZh": "看病",
+  "paragraphs": [
+   [
+    "昨天晚上我觉得很不舒服，头很疼，也不想吃饭。",
+    "Anoche me encontraba muy mal: me dolía mucho la cabeza y no tenía ganas de comer."
+   ],
+   [
+    "今天早上我去医院看病。医生问我：“你哪儿不舒服？”",
+    "Esta mañana fui al médico al hospital. El médico me preguntó: «¿Qué le pasa?»."
+   ],
+   [
+    "医生说：“问题不大。你要多喝水，多休息，这两天别去上班了。”",
+    "El médico dijo: «No es grave. Beba mucha agua, descanse mucho y no vaya a trabajar estos dos días»."
+   ],
+   [
+    "我去药店买了药。吃了药，我睡了一会儿，现在身体好一点儿了。",
+    "Fui a la farmacia a comprar medicinas. Después de tomarlas dormí un rato y ahora me encuentro un poco mejor."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Qué le dolía?",
+    "options": [
+     "La cabeza",
+     "El pie",
+     "Los ojos"
+    ],
+    "answer": 0
+   },
+   {
+    "q": "¿Qué le recomendó el médico?",
+    "options": [
+     "Hacer deporte",
+     "Beber agua y descansar",
+     "Ir a trabajar"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h2-nueva-companera",
+  "level": 2,
+  "title": "Una compañera nueva",
+  "titleZh": "新同学",
+  "paragraphs": [
+   [
+    "这个星期我们班来了一个新同学。她姓李，是从外国来的。",
+    "Esta semana llegó a nuestra clase una compañera nueva. Se apellida Li y viene del extranjero."
+   ],
+   [
+    "老师给我们介绍：“她叫李安，她要跟你们一起学习。”",
+    "La profesora nos la presentó: «Se llama Li An y va a estudiar con vosotros»."
+   ],
+   [
+    "李安个子不高，眼睛很大，很喜欢笑。她的汉语说得不错，但是有些字还不会写。",
+    "Li An no es alta, tiene los ojos grandes y le encanta reír. Habla bastante bien chino, pero aún no sabe escribir algunos caracteres."
+   ],
+   [
+    "下课了，我帮她写字，她教我唱外国歌。我们已经是好朋友了。",
+    "Al terminar la clase la ayudo a escribir y ella me enseña canciones extranjeras. Ya somos buenas amigas."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿De dónde viene Li An?",
+    "options": [
+     "De Pekín",
+     "Del extranjero",
+     "Del sur de China"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué le cuesta a Li An?",
+    "options": [
+     "Hablar chino",
+     "Escribir algunos caracteres",
+     "Entender a la profesora"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h2-tiempo",
+  "level": 2,
+  "title": "Un día de lluvia",
+  "titleZh": "下雨天",
+  "paragraphs": [
+   [
+    "今天早上天阴了，我想：可能要下雨了。",
+    "Esta mañana se nubló y pensé: puede que llueva."
+   ],
+   [
+    "十点的时候，真的下雨了，外面的路上没有什么人。",
+    "A las diez, efectivamente, empezó a llover y en la calle no había casi nadie."
+   ],
+   [
+    "我们想去踢球，但是下雨了，所以就在家里看电视、喝奶茶。",
+    "Queríamos ir a jugar al fútbol, pero llovió, así que nos quedamos en casa viendo la tele y tomando té con leche."
+   ],
+   [
+    "下午不下雨了，天晴了。我们出门走了走，觉得非常舒服。",
+    "Por la tarde dejó de llover y salió el sol. Salimos a dar un paseo y nos sentó genial."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Qué querían hacer?",
+    "options": [
+     "Ir al cine",
+     "Jugar al fútbol",
+     "Nadar"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué tiempo hizo por la tarde?",
+    "options": [
+     "Siguió lloviendo",
+     "Nevó",
+     "Salió el sol"
+    ],
+    "answer": 2
+   }
+  ]
+ },
+ {
+  "id": "h3-mudanza",
+  "level": 3,
+  "title": "La mudanza",
+  "titleZh": "搬家",
+  "paragraphs": [
+   [
+    "上个月我们家搬家了。以前我们住在城市的东边，离我的学校比较远，每天上学要坐一个多小时的公交车。",
+    "El mes pasado nos mudamos. Antes vivíamos en el este de la ciudad, bastante lejos de mi escuela; cada día tardaba más de una hora en autobús."
+   ],
+   [
+    "现在的小区很安静，环境也很好。附近有公园、超市和银行，生活非常方便。",
+    "La urbanización de ahora es muy tranquila y el entorno es muy agradable. Cerca hay un parque, un supermercado y un banco: la vida es muy cómoda."
+   ],
+   [
+    "搬家那天，爸爸的同事来帮忙，我们一共搬了二十多个箱子，大家都累极了。",
+    "El día de la mudanza vinieron a ayudar los compañeros de trabajo de mi padre; en total movimos más de veinte cajas y todos acabamos agotados."
+   ],
+   [
+    "我们的邻居很热情，第二天就请我们去他们家做客。我觉得我会喜欢这个新家的。",
+    "Nuestros vecinos son muy amables: al día siguiente ya nos invitaron a su casa. Creo que me va a gustar esta casa nueva."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Por qué era incómoda la casa anterior?",
+    "options": [
+     "Era muy ruidosa",
+     "Estaba lejos de la escuela",
+     "Era pequeña"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué hay cerca de la nueva casa?",
+    "options": [
+     "Un parque, un supermercado y un banco",
+     "Un aeropuerto",
+     "Una montaña"
+    ],
+    "answer": 0
+   },
+   {
+    "q": "¿Qué hicieron los vecinos?",
+    "options": [
+     "Se quejaron del ruido",
+     "Los invitaron a su casa",
+     "Les ayudaron a mudarse"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h3-estudiar-fuera",
+  "level": 3,
+  "title": "Estudiar en China",
+  "titleZh": "我的留学生活",
+  "paragraphs": [
+   [
+    "我叫安娜，来自西班牙。去年九月，我来中国留学，学习汉语和中国文化。",
+    "Me llamo Ana y soy de España. El pasado septiembre vine a estudiar a China: chino y cultura china."
+   ],
+   [
+    "刚来的时候，我听不懂别人说的话，也不习惯这里的饭菜，心里有点儿难过。",
+    "Cuando llegué no entendía lo que decía la gente ni estaba acostumbrada a la comida, y me sentía un poco triste."
+   ],
+   [
+    "后来，我认识了很多中国朋友。他们很关心我，经常和我聊天儿，还带我去很多有意思的地方。",
+    "Después conocí a muchos amigos chinos. Se preocupan por mí, charlan conmigo a menudo y me llevan a muchos sitios interesantes."
+   ],
+   [
+    "现在我的汉语水平提高了很多，已经习惯了这里的生活。我希望以后能在中国工作。",
+    "Ahora mi nivel de chino ha mejorado mucho y ya me he acostumbrado a la vida aquí. Espero poder trabajar en China en el futuro."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿De dónde es Ana?",
+    "options": [
+     "De México",
+     "De España",
+     "De Argentina"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Cómo se sentía al principio?",
+    "options": [
+     "Muy contenta",
+     "Un poco triste",
+     "Enfadada"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué espera hacer en el futuro?",
+    "options": [
+     "Volver a España",
+     "Trabajar en China",
+     "Ser profesora"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h3-montana",
+  "level": 3,
+  "title": "Excursión a la montaña",
+  "titleZh": "周末爬山",
+  "paragraphs": [
+   [
+    "这个周末天气特别好，我和几个同学决定去爬山。",
+    "Este fin de semana hizo un tiempo especialmente bueno, así que unos compañeros y yo decidimos subir a la montaña."
+   ],
+   [
+    "我们早上六点就出发了。山上很凉快，到处都是绿色的树和很多颜色的花。",
+    "Salimos ya a las seis de la mañana. En la montaña hacía fresco y por todas partes había árboles verdes y flores de muchos colores."
+   ],
+   [
+    "爬到一半的时候，我的腿很疼，想回去。朋友们对我说：“坚持一下，马上就到了！”",
+    "A mitad de camino me dolían mucho las piernas y quería volver. Mis amigos me dijeron: «¡Aguanta un poco, ya casi llegamos!»."
+   ],
+   [
+    "终于，我们爬到了山上。站在上面往下看，城市就在我们面前，大家都拿出手机拍照。",
+    "Por fin llegamos a la cima. Al mirar hacia abajo, la ciudad estaba ante nosotros y todos sacamos el móvil para hacer fotos."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿A qué hora salieron?",
+    "options": [
+     "A las seis",
+     "A las ocho",
+     "Al mediodía"
+    ],
+    "answer": 0
+   },
+   {
+    "q": "¿Qué le pasó a mitad de camino?",
+    "options": [
+     "Se perdió",
+     "Le dolían las piernas",
+     "Empezó a llover"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h3-examen",
+  "level": 3,
+  "title": "El examen",
+  "titleZh": "一次考试",
+  "paragraphs": [
+   [
+    "下个星期有汉语考试，这几天我每天晚上都在图书馆复习。",
+    "La semana que viene hay examen de chino; estos días repaso todas las noches en la biblioteca."
+   ],
+   [
+    "老师说，这次考试主要考听和读，所以我每天听半个小时的课文，还做很多练习。",
+    "La profesora dijo que este examen evalúa sobre todo la comprensión oral y la lectura, así que cada día escucho media hora los textos y hago muchos ejercicios."
+   ],
+   [
+    "考试那天，我有点儿着急，因为有一些题比较难。但是我认真想了想，终于都回答了。",
+    "El día del examen estaba un poco nervioso porque algunas preguntas eran bastante difíciles. Pero lo pensé con calma y al final las contesté todas."
+   ],
+   [
+    "一个星期以后，成绩出来了，我得了九十分！我非常满意，也更喜欢学汉语了。",
+    "Una semana después salieron las notas: ¡saqué un noventa! Estoy muy satisfecho y ahora me gusta aún más estudiar chino."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Dónde repasa por las noches?",
+    "options": [
+     "En casa",
+     "En la biblioteca",
+     "En un café"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué nota sacó?",
+    "options": [
+     "Setenta",
+     "Ochenta",
+     "Noventa"
+    ],
+    "answer": 2
+   }
+  ]
+ },
+ {
+  "id": "h3-compras-online",
+  "level": 3,
+  "title": "Comprar por internet",
+  "titleZh": "在网上买东西",
+  "paragraphs": [
+   [
+    "现在很多人都喜欢在网上买东西，我也一样。",
+    "Hoy en día a mucha gente le gusta comprar por internet, y a mí también."
+   ],
+   [
+    "在网上买东西很方便，不用出门，东西也比较便宜。用手机选好以后，一两天就能收到。",
+    "Comprar por internet es muy práctico: no hace falta salir de casa y las cosas son más baratas. Después de elegir con el móvil, llega en uno o dos días."
+   ],
+   [
+    "但是网上买东西也有问题。有一次我买了一双鞋，收到以后发现大小不合适，只好换了一双。",
+    "Pero comprar por internet también tiene problemas. Una vez compré unos zapatos y, al recibirlos, vi que la talla no me quedaba bien, así que tuve que cambiarlos."
+   ],
+   [
+    "所以我觉得，买衣服和鞋的时候，最好还是去商店试一试。",
+    "Por eso creo que, para comprar ropa y zapatos, lo mejor sigue siendo ir a la tienda a probárselos."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Cuánto tarda en llegar lo que compra?",
+    "options": [
+     "Una semana",
+     "Uno o dos días",
+     "Un mes"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué problema tuvo?",
+    "options": [
+     "Los zapatos no eran de su talla",
+     "No llegó el paquete",
+     "Era muy caro"
+    ],
+    "answer": 0
+   },
+   {
+    "q": "¿Qué recomienda para la ropa?",
+    "options": [
+     "Comprarla por internet",
+     "Ir a la tienda a probársela",
+     "Pedir ayuda a un amigo"
+    ],
+    "answer": 1
+   }
+  ]
+ },
+ {
+  "id": "h3-ano-nuevo",
+  "level": 3,
+  "title": "El Año Nuevo chino",
+  "titleZh": "过年",
+  "paragraphs": [
+   [
+    "在中国，过年是一年中最重要的节日。很多人在外地工作，但是过年的时候，大家都会回家。",
+    "En China, el Año Nuevo es la fiesta más importante del año. Mucha gente trabaja en otras ciudades, pero en Año Nuevo todos vuelven a casa."
+   ],
+   [
+    "过年以前，人们会打扫房子，买新衣服，准备很多好吃的东西。",
+    "Antes del Año Nuevo, la gente limpia la casa, compra ropa nueva y prepara mucha comida rica."
+   ],
+   [
+    "除夕那天晚上，一家人坐在一起吃饺子、看电视节目、聊天儿，一直到新年的第一分钟。",
+    "La noche de fin de año, toda la familia se sienta junta a comer jiaozi, ver programas de televisión y charlar hasta el primer minuto del año nuevo."
+   ],
+   [
+    "孩子们最喜欢过年，因为可以穿新衣服，还能收到很多钱。",
+    "A los niños es a quienes más les gusta el Año Nuevo, porque pueden estrenar ropa y además reciben mucho dinero."
+   ]
+  ],
+  "questions": [
+   {
+    "q": "¿Qué hace la gente antes del Año Nuevo?",
+    "options": [
+     "Se va de viaje al extranjero",
+     "Limpia la casa y compra ropa nueva",
+     "Trabaja más horas"
+    ],
+    "answer": 1
+   },
+   {
+    "q": "¿Qué come la familia esa noche?",
+    "options": [
+     "Jiaozi",
+     "Pastel",
+     "Helado"
+    ],
+    "answer": 0
+   },
+   {
+    "q": "¿Por qué les gusta a los niños?",
+    "options": [
+     "No hay clase",
+     "Estrenan ropa y reciben dinero",
+     "Ven a sus amigos"
+    ],
+    "answer": 1
+   }
+  ]
+ }
+]

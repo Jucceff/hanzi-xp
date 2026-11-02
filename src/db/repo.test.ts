@@ -63,3 +63,24 @@ describe('DexieProgressRepo', () => {
     expect(() => parseBackup({ app: 'hanzi-xp', schema: 99, skillStates: [], reviewLog: [], dailyStats: [] })).toThrow(/más nueva/);
   });
 });
+
+describe('lecturas', () => {
+  it('adelantar el repaso de palabras consultadas no cambia su XP', async () => {
+    const repo = new DexieProgressRepo(new HanziDB('t-read'));
+    await practice(repo, new Date('2026-11-01T10:00:00'));
+    const [before] = (await repo.statesFor(['w:我们'])).filter((s) => s.skill === 'recognition');
+    const now = Date.parse('2026-11-01T12:00:00');
+    expect(before.due!).toBeGreaterThan(now);
+    expect(await repo.bringForward(['w:我们', 'w:没练过'], 'recognition', now)).toBe(1);
+    const [after] = (await repo.statesFor(['w:我们'])).filter((s) => s.skill === 'recognition');
+    expect(after.due).toBe(now);
+    expect(after.card!.dueAt.getTime()).toBe(now);
+    expect(after.xp).toBe(before.xp);
+  });
+  it('el historial de lecturas sale del registro (y por tanto se sincroniza)', async () => {
+    const repo = new DexieProgressRepo(new HanziDB('t-hist'));
+    const log = (sessionId: string, ts: number) => ({ id: `${sessionId}-${ts}`, ts, itemId: 'c:我' as const, skill: 'recognition' as const, exercise: 'reading' as const, grade: 3 as const, correct: true, xpDelta: 1, direct: false, sessionId, deviceId: 'd' });
+    await repo.db.reviewLog.bulkAdd([log('lectura:h1-mi-dia:a', 1), log('lectura:h1-mi-dia:a', 2), log('lectura:h1-mi-dia:b', 5), log('otra-sesion', 9)]);
+    expect([...(await repo.readingHistory())]).toEqual([['h1-mi-dia', { count: 2, last: 5 }]]);
+  });
+});

@@ -8,6 +8,8 @@ import { ProgressPage } from './features/progress/ProgressPage';
 import { SourcesPage } from './features/progress/SourcesPage';
 import { Session } from './features/session/Session';
 import { WordsPage } from './features/words/WordsPage';
+import { ReaderPage } from './features/reading/ReaderPage';
+import { ReadingsPage } from './features/reading/ReadingsPage';
 
 const TABS = [
   { to: '/', han: '今', label: 'Hoy', end: true },
@@ -67,6 +69,8 @@ export default function App() {
           <Route path="progreso" element={<ProgressPage />} />
           <Route path="fuentes" element={<SourcesPage />} />
           <Route path="ficha/:kind/:key" element={<ItemPage />} />
+          <Route path="lecturas" element={<ReadingsPage />} />
+          <Route path="lectura/:id" element={<ReaderPage />} />
         </Route>
       </Routes>
     </HashRouter>

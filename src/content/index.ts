@@ -2,15 +2,18 @@
 import charsJson from '../../data/build/chars.json';
 import metaJson from '../../data/build/meta.json';
 import phrasesJson from '../../data/build/phrases.json';
+import readingsJson from '../../data/build/readings.json';
 import wordsJson from '../../data/build/words.json';
 import { charItem, itemKey, itemKind, wordItem, type ItemId } from '../core/skills';
-import type { Char, ContentMeta, HskLevel, Phrase, SentenceToken, Word } from './types';
+import type { Char, ContentMeta, HskLevel, Phrase, Reading, SentenceToken, Word } from './types';
 
 export const words = wordsJson as Word[];
 export const chars = charsJson as Char[];
 export const meta = metaJson as ContentMeta;
 export const phrases = phrasesJson as Phrase[];
 export const phraseById = new Map(phrases.map((p) => [p.id, p]));
+export const readings = readingsJson as Reading[];
+export const readingById = new Map(readings.map((r) => [r.id, r]));
 
 export const wordById = new Map(words.map((w) => [w.id, w]));
 export const charByChar = new Map(chars.map((c) => [c.char, c]));
@@ -97,4 +100,4 @@ export function phraseSentence(p: Phrase): Sentence {
 }
 
 export { charItem, wordItem };
-export type { Char, Phrase, Word };
+export type { Char, Phrase, Reading, Word };

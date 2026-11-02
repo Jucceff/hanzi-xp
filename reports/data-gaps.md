@@ -1,6 +1,6 @@
 # Reporte de huecos de datos
 
-Generado: 2026-11-02T15:41:36.614Z · versión `hsk2025-2026-11-02`
+Generado: 2026-11-02T23:17:29.033Z · versión `hsk2025-2026-11-02`
 
 ## Recuentos (temario oficial)
 

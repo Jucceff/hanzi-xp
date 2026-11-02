@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { pinyin as pinyinPro, polyphonic } from 'pinyin-pro';
 import { splitPinyin, toNumbered, toneOf } from '../../src/core/pinyin';
 import { isHan, segment } from '../../src/core/segment';
-import type { Char, ContentMeta, Example, GrammarPoint, HskLevel, Phrase, SentenceToken, Tone, Word } from '../../src/content/types';
+import type { Char, ContentMeta, Example, GrammarPoint, HskLevel, Phrase, Reading, SentenceToken, Tone, Word } from '../../src/content/types';
 import { plainKey } from '../../src/core/pinyin';
 import { validateAll } from './validate';
 
@@ -244,6 +244,11 @@ const PROPER: Record<string, [string, string]> = {
   北京: ['Běijīng', 'Pekín'],
   王明: ['Wáng Míng', 'Wang Ming (nombre)'],
   李: ['Lǐ', 'Li (apellido)'],
+  李大: ['Lǐ Dà', 'Li Da (nombre)'],
+  李安: ['Lǐ Ān', 'Li An (nombre)'],
+  安娜: ['Ānnà', 'Ana (nombre)'],
+  小白: ['Xiǎobái', 'Xiaobai (nombre de mascota)'],
+  除夕: ['chúxī', 'Nochevieja del calendario chino'],
 };
 const wordsBySimp = new Map<string, Word[]>();
 for (const w of words) {
@@ -304,6 +309,28 @@ for (const [tema, list] of Object.entries(readAuthored<AuthoredPhrases>('phrases
       .replace(/ ([，。？！、：；])/g, '$1');
     const slug = tema.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z]+/g, '-');
     phrases.push({ id: `${slug}-${i + 1}`, zh, es, tema, level: level as HskLevel, tokens, pinyin });
+  });
+}
+
+// ───────────────────────── lecturas graduadas ─────────────────────────
+type AuthoredReading = Omit<Reading, 'paragraphs' | 'words' | 'length'> & { paragraphs: [string, string][] };
+const readings: Reading[] = [];
+const wordIndex = new Map(words.map((w) => [w.id, w]));
+for (const r of readAuthored<AuthoredReading[]>('readings.json', [])) {
+  const paragraphs = r.paragraphs.map(([zh, es]) => ({ zh, es, ...tokenize(zh) }));
+  const unknown = [...new Set(paragraphs.flatMap((p) => p.unknown))];
+  const level = Math.max(...paragraphs.map((p) => p.level));
+  if (unknown.length) problems.push(`Lectura ${r.id}: palabras fuera del HSK 1–3: ${unknown.join(' ')}`);
+  else if (level > r.level) {
+    const above = paragraphs.flatMap((p) => p.tokens).filter((t) => t.w && wordIndex.get(t.w)!.level > r.level).map((t) => t.t);
+    problems.push(`Lectura ${r.id} (HSK${r.level}) usa vocabulario de nivel superior: ${[...new Set(above)].join(' ')}`);
+  }
+  if (r.questions.some((q) => q.answer < 0 || q.answer >= q.options.length)) problems.push(`Lectura ${r.id}: respuesta fuera de rango`);
+  readings.push({
+    ...r,
+    paragraphs: paragraphs.map(({ zh, es, tokens }) => ({ zh, es, tokens })),
+    words: [...new Set(paragraphs.flatMap((p) => p.tokens).filter((t) => t.w).map((t) => t.w!))],
+    length: paragraphs.reduce((a, p) => a + [...p.zh].filter(isHan).length, 0),
   });
 }
 
@@ -423,6 +450,7 @@ write('chars.json', chars);
 write('grammar.json', grammar);
 if (new Set(phrases.map((p) => p.id)).size !== phrases.length) errors.push('Ids de frases útiles duplicados');
 write('phrases.json', phrases);
+write('readings.json', readings);
 write('meta.json', meta);
 
 mkdirSync(STROKES_OUT, { recursive: true });
@@ -447,6 +475,7 @@ for (const w of words) {
 for (const c of chars) addText(c.char + c.trad + c.pinyin.join('') + c.components.join('') + c.radical);
 for (const g of grammar) addText(g.content + g.officialExamples.join(''));
 for (const ph of phrases) addText(ph.zh + ph.pinyin);
+for (const r of readings) addText(r.titleZh + r.paragraphs.map((p) => p.zh + p.tokens.map((t) => t.p).join('')).join(''));
 addText(' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüńňǹ’\'-·…');
 addText('，。？！、：；“”‘’（）《》—～·');
 const fontSrc = join(RAW, 'LXGWWenKai-Regular.ttf');

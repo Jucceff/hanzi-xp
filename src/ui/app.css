@@ -978,6 +978,81 @@ a {
   height: 30px;
 }
 
+/* lector */
+.reading-text {
+  margin: 0 0 8px;
+  font-size: 26px;
+  line-height: 1.7;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.reading-text.with-py {
+  line-height: 1.25;
+  row-gap: 10px;
+}
+.rt {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0 1px;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: inline-grid;
+  justify-items: center;
+  border-radius: 4px;
+}
+.rt .py {
+  font-size: 12px;
+  line-height: 1.1;
+}
+.rt:hover,
+.rt:focus-visible {
+  background: var(--paper-2);
+}
+.rt.unseen .han {
+  text-decoration: underline dotted var(--seal);
+  text-underline-offset: 6px;
+}
+.rt.consulted {
+  background: color-mix(in srgb, var(--seal) 13%, transparent);
+}
+.rp {
+  font-size: 26px;
+}
+.rg {
+  display: inline-flex;
+  align-items: flex-end;
+  white-space: nowrap;
+}
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(20, 15, 10, 0.25);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.sheet {
+  width: 100%;
+  max-width: 600px;
+  background: var(--card);
+  border-radius: 18px 18px 0 0;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  animation: sheet-in 0.18s ease-out;
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
+
 /* ───────── ficha ───────── */
 .item-head {
   display: grid;
