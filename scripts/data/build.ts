@@ -436,9 +436,31 @@ const meta: ContentMeta = {
   ],
 };
 
+// ───────────────────────── estabilidad de ids ─────────────────────────
+// El progreso de los usuarios está enganchado a estos ids (w:我们, c:我, frase, lectura).
+// Si uno que ya existía desaparece, el progreso guardado quedaría huérfano: se bloquea el build
+// salvo que se autorice expresamente (ALLOW_ID_CHANGES=1) junto con una migración.
+function previousIds(file: string, key: (x: Record<string, unknown>) => string): string[] {
+  const p = join(OUT, file);
+  return existsSync(p) ? readJson<Record<string, unknown>[]>(p).map(key) : [];
+}
+const idChecks: [string, string[], Set<string>][] = [
+  ['palabras', previousIds('words.json', (x) => x.id as string), new Set(words.map((w) => w.id))],
+  ['caracteres', previousIds('chars.json', (x) => x.char as string), new Set(chars.map((c) => c.char))],
+  ['frases útiles', previousIds('phrases.json', (x) => x.id as string), new Set(phrases.map((p) => p.id))],
+  ['lecturas', previousIds('readings.json', (x) => x.id as string), new Set(readings.map((r) => r.id))],
+];
+for (const [label, before, now] of idChecks) {
+  const lost = before.filter((id) => !now.has(id));
+  if (lost.length && process.env.ALLOW_ID_CHANGES !== '1')
+    errors.push(`Desaparecen ids de ${label} con progreso posible (${lost.slice(0, 10).join(', ')}${lost.length > 10 ? '…' : ''}). Haz una migración y usa ALLOW_ID_CHANGES=1.`);
+}
+
 mkdirSync(OUT, { recursive: true });
 // Un registro por línea: diffs legibles en git.
+// Con errores no se sobrescribe nada: el contenido publicado sigue siendo el último válido.
 const write = (name: string, data: unknown) =>
+  errors.length ||
   writeFileSync(
     join(OUT, name),
     Array.isArray(data)
